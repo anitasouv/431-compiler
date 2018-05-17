@@ -23,7 +23,6 @@ public class GlobalDecLLVM implements LLVM {
          this.num = num;
          this.arms = new ArrayList<ARM> ();
 
-<<<<<<< HEAD
 	 if (scope.equals("private")) {
             arms.add(new AlignARM(2));
             arms.add(new LabelARM(name));
@@ -31,11 +30,6 @@ public class GlobalDecLLVM implements LLVM {
 	 } else  {
             arms.add(new CommARM(name));
          }
-=======
-         arms.add(new AlignARM(2));
-         arms.add(new LabelARM(name));
-         arms.add(new AscizARM( body ));
->>>>>>> 0c2c6e50b9c6715d581b6ae742ad8deb79f23b8b
     }
 
     public void printOut() {
@@ -58,11 +52,8 @@ public class GlobalDecLLVM implements LLVM {
          this.arms.addAll(arms);
     }
 
-<<<<<<< HEAD
     public List<ARM> getARMS() {
 	return arms;
     }
-=======
->>>>>>> 0c2c6e50b9c6715d581b6ae742ad8deb79f23b8b
 }
 

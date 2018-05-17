@@ -1,11 +1,8 @@
 package arm;
 
 import java.util.List;
-<<<<<<< HEAD
 import java.util.Set;
 import java.util.HashSet;
-=======
->>>>>>> 0c2c6e50b9c6715d581b6ae742ad8deb79f23b8b
 
 public class PushPopARM implements ARM {
      public Operation op;
@@ -30,7 +27,6 @@ public class PushPopARM implements ARM {
          } 
          System.out.println("}");
      }
-<<<<<<< HEAD
      public Set<String> getSources() {
         HashSet<String> sources = new HashSet<String>();
 	if(op == Operation.PUSH) {
@@ -51,7 +47,5 @@ public class PushPopARM implements ARM {
         return targets;
      }
 
-=======
->>>>>>> 0c2c6e50b9c6715d581b6ae742ad8deb79f23b8b
 }
 

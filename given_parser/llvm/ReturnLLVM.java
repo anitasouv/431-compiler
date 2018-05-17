@@ -39,11 +39,8 @@ public class ReturnLLVM implements LLVM {
          this.arms.addAll(arms);
     }
 
-<<<<<<< HEAD
     public List<ARM> getARMS() {
 	return arms;
     }
-=======
->>>>>>> 0c2c6e50b9c6715d581b6ae742ad8deb79f23b8b
 }
 

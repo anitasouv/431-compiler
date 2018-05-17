@@ -44,35 +44,19 @@ public class ConditionalStatement
    public CFGNode cfg(List<TypeDeclaration> types, List<Declaration> decls, List<Function> func, Function curFunc, CFGNode startNode, CFGNode exitNode) {
        startNode.addGuard(guard);
        startNode.addLLVMList(guard.toLLVM(types, decls, func, curFunc, startNode, exitNode));
-<<<<<<< HEAD
        String compareReg = startNode.getLLVM().get(startNode.getLLVM().size() - 1).getResultReg();
 
        CFGNode thenNode = new CFGNode(startNode.name, exitNode.labelCountAndIncrement(), 0, 0, 0);
-=======
- 
-       CFGNode thenNode = new CFGNode( startNode.name, exitNode.blockNum );
-       exitNode.incrementBlock();
->>>>>>> 0c2c6e50b9c6715d581b6ae742ad8deb79f23b8b
        thenNode.addParent(startNode);
        startNode.addChild(thenNode);
        CFGNode thenEndNode = thenBlock.cfg(types, decls, func, curFunc, thenNode, exitNode);
 
-<<<<<<< HEAD
        CFGNode elseNode = new CFGNode(startNode.name, exitNode.labelCountAndIncrement(), 0, 0, 0);
-=======
-       CFGNode elseNode = new CFGNode(startNode.name, exitNode.blockNum);
-       exitNode.incrementBlock();
->>>>>>> 0c2c6e50b9c6715d581b6ae742ad8deb79f23b8b
        elseNode.addParent(startNode);
        startNode.addChild(elseNode);
        CFGNode elseEndNode = elseBlock.cfg(types, decls, func, curFunc, elseNode, exitNode);
        
-<<<<<<< HEAD
        CFGNode ifEndNode = new CFGNode( startNode.name, exitNode.labelCountAndIncrement(), 0, 0, 0);
-=======
-       CFGNode ifEndNode = new CFGNode(startNode.name, exitNode.blockNum );
-       exitNode.incrementBlock();
->>>>>>> 0c2c6e50b9c6715d581b6ae742ad8deb79f23b8b
        ifEndNode.addParent(thenEndNode);
        ifEndNode.addParent(elseEndNode);
 
@@ -80,7 +64,6 @@ public class ConditionalStatement
        elseEndNode.addChild(ifEndNode);
 
 // add branches
-<<<<<<< HEAD
 /*	String type = "";
        if (!(startNode.getLLVM().get(startNode.getLLVM().size() - 1) instanceof ComparisonLLVM )) {
        	    if (!(startNode.getLLVM().get(startNode.getLLVM().size() - 1) instanceof LoadLLVM )) {
@@ -114,12 +97,6 @@ public class ConditionalStatement
        }
        
        
-=======
-       String op = ((BinaryExpression) guard).getOp();
-       startNode.addLLVM(new BranchLLVM( op , thenNode.name + thenNode.count, elseNode.name + elseNode.count));
-       thenNode.addLLVM(new BranchImmLLVM(ifEndNode.name + ifEndNode.count));
-       elseNode.addLLVM(new BranchImmLLVM(ifEndNode.name + ifEndNode.count));
->>>>>>> 0c2c6e50b9c6715d581b6ae742ad8deb79f23b8b
 
        return ifEndNode;
    }

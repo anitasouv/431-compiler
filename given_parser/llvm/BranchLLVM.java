@@ -18,22 +18,12 @@ public class BranchLLVM implements LLVM {
          this.arms = new ArrayList<ARM>();
 
          arms.add(new ComparisonARM(cond, "#1"));
-<<<<<<< HEAD
          arms.add(new BranchARM( "BEQ", trueLabel));
          arms.add(new BranchARM( "B", falseLabel));
-=======
-         arms.add(new BranchARM( "BEQ", "." + trueLabel));
-         arms.add(new BranchARM( "B", "." + falseLabel));
->>>>>>> 0c2c6e50b9c6715d581b6ae742ad8deb79f23b8b
     }
 
     public void printOut() {
          System.out.println( "\tbr i1 " + cond + ", label %" + trueLabel + ", label %" + falseLabel );
-    }
-    public void printOutARM() {
-         for (int i = 0; i < arms.size(); i++) {
-              arms.get(i).printOut();
-         }
     }
     public void printOutARM() {
          for (int i = 0; i < arms.size(); i++) {
@@ -50,11 +40,8 @@ public class BranchLLVM implements LLVM {
          this.arms.addAll(arms);
     }
 
-<<<<<<< HEAD
     public List<ARM> getARMS() {
 	return arms;
     }
-=======
->>>>>>> 0c2c6e50b9c6715d581b6ae742ad8deb79f23b8b
 }
 

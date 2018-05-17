@@ -31,11 +31,7 @@ public class BinaryLLVM implements LLVM {
           if(op2.charAt(0) == '%') {
 		// add register
 		if(this.op != Operation.SDIV) {
-<<<<<<< HEAD
 			arms.add(new BinaryARM(opARM, result, op1, op2));
-=======
-			arms.add(new BinaryARM(op, result, op1, op2));
->>>>>>> 0c2c6e50b9c6715d581b6ae742ad8deb79f23b8b
 		}
           	else {
 			// division by hand
@@ -43,32 +39,20 @@ public class BinaryLLVM implements LLVM {
 			arms.add(new MovesARM("MOV", "%r0", op1));
 			arms.add(new MovesARM("MOV", "%r1", op2));
                         arms.add(new BranchARM("BL", "__aeabi_idiv"));
-<<<<<<< HEAD
                         //arms.add(new MovesARM("MOV", result, "%r0"));
-=======
-                        arms.add(new MovesARM("MOV", result, "%r0"));
->>>>>>> 0c2c6e50b9c6715d581b6ae742ad8deb79f23b8b
 		}
 	  }
 	  else {
 		// add register + immediate
 		if(this.op != Operation.SDIV) {
 	        	if(Integer.parseInt(op2) < 10000) {	
-<<<<<<< HEAD
 				arms.add(new BinaryARM(opARM, result, op1, op2));
-=======
-				arms.add(new BinaryARM(op, result, op1, op2));
->>>>>>> 0c2c6e50b9c6715d581b6ae742ad8deb79f23b8b
 			}
 			else {
 				// overflow
 				arms.add(new MovesARM("MOVW", "%t9", "#:lower16:" + op2));
 				arms.add(new MovesARM("MOVT", "%t9", "#:upper16:" + op2));
-<<<<<<< HEAD
 				arms.add(new BinaryARM(opARM, result, op1, "%t9"));
-=======
-				arms.add(new BinaryARM(op, result, op1, "%t9"));
->>>>>>> 0c2c6e50b9c6715d581b6ae742ad8deb79f23b8b
 			}
                 }
           	else {
@@ -79,11 +63,6 @@ public class BinaryLLVM implements LLVM {
                         if(Integer.parseInt(op2) < 10000) {	
 				arms.add(new MovesARM("MOV", "%r1", op2));
                         	arms.add(new BranchARM("BL", "__aeabi_idiv"));
-<<<<<<< HEAD
-                        //	arms.add(new MovesARM("MOV", result, "%r0"));
-=======
-                        	arms.add(new MovesARM("MOV", result, "%r0"));
->>>>>>> 0c2c6e50b9c6715d581b6ae742ad8deb79f23b8b
 			}
 			else {
 				arms.add(new MovesARM("MOVW", "%t9", "#:lower16:" + op2));
@@ -91,19 +70,9 @@ public class BinaryLLVM implements LLVM {
 			
    				arms.add(new MovesARM("MOV", "%r1", "%t9"));
                         	arms.add(new BranchARM("BL", "__aeabi_idiv"));
-<<<<<<< HEAD
-                        //	arms.add(new MovesARM("MOV", result, "%r0"));
                         }
 		}
 	  }
-
-          
-=======
-                        	arms.add(new MovesARM("MOV", result, "%r0"));
-                        }
-		}
-	  }
->>>>>>> 0c2c6e50b9c6715d581b6ae742ad8deb79f23b8b
     }
 
     enum Operation {
@@ -112,11 +81,6 @@ public class BinaryLLVM implements LLVM {
 
     public void printOut() {
          System.out.println("\t" + result + " = " + op.toString().toLowerCase() + " " + type + " " + op1 + ", " + op2 );
-    }
-    public void printOutARM() {
-         for (int i = 0; i < arms.size(); i++) {
-              arms.get(i).printOut();
-         }
     }
     public void printOutARM() {
          for (int i = 0; i < arms.size(); i++) {
@@ -133,11 +97,8 @@ public class BinaryLLVM implements LLVM {
     public void addARMList(List<ARM> arms ) {
          this.arms.addAll(arms);
     }
-<<<<<<< HEAD
     public List<ARM> getARMS() {
 	return arms;
     }
-=======
->>>>>>> 0c2c6e50b9c6715d581b6ae742ad8deb79f23b8b
 
 }

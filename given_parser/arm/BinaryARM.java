@@ -1,11 +1,7 @@
 package arm;
-<<<<<<< HEAD
 import java.util.Set;
 import java.util.HashSet;
 import java.util.Arrays;
-=======
-
->>>>>>> 0c2c6e50b9c6715d581b6ae742ad8deb79f23b8b
 
 public class BinaryARM implements ARM {
      public Operation op;
@@ -27,7 +23,6 @@ public class BinaryARM implements ARM {
      public void printOut() {
          System.out.println( "\t" + op + "\t" + dest + "," + reg + "," + operand2);
      }
-<<<<<<< HEAD
 
      public Set<String> getSources() {
  //System.out.println("in binary get source");
@@ -45,6 +40,5 @@ public class BinaryARM implements ARM {
 	destination.add(dest);
 	return destination;
      }
-=======
->>>>>>> 0c2c6e50b9c6715d581b6ae742ad8deb79f23b8b
+
 }

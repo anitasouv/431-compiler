@@ -20,23 +20,15 @@ public class MiscLLVM implements LLVM {
          this.type2 = type2;
          this.op = Operation.valueOf(op);
          this.arms = new ArrayList<ARM>();
-<<<<<<< HEAD
          arms.add(new MovesARM("MOV", result, value));
 /*
-=======
-
->>>>>>> 0c2c6e50b9c6715d581b6ae742ad8deb79f23b8b
          if (this.op == Operation.BITCAST) {
               arms.add(new MovesARM("MOV", result, value));
          } else if (this.op == Operation.TRUNC) {
               // does nothing
          } else if (this.op == Operation.ZEXT) {
               // does nothing
-<<<<<<< HEAD
          }*/
-=======
-         }
->>>>>>> 0c2c6e50b9c6715d581b6ae742ad8deb79f23b8b
     }
 
     enum Operation {
@@ -45,11 +37,6 @@ public class MiscLLVM implements LLVM {
 
     public void printOut() {
          System.out.println("\t" + result + " = " + op.toString().toLowerCase() + " " + type + " " + value + " to " + type2 );
-    }
-    public void printOutARM() {
-         for (int i = 0; i < arms.size(); i++) {
-              arms.get(i).printOut();
-         }
     }
     public void printOutARM() {
          for (int i = 0; i < arms.size(); i++) {
@@ -67,11 +54,8 @@ public class MiscLLVM implements LLVM {
          this.arms.addAll(arms);
     }
 
-<<<<<<< HEAD
     public List<ARM> getARMS() {
 	return arms;
     }
-=======
->>>>>>> 0c2c6e50b9c6715d581b6ae742ad8deb79f23b8b
 }
 

@@ -11,7 +11,6 @@ public class InvocationLLVM implements LLVM {
     public String type;
     public String fnptrval;
     public List<String> args;
-<<<<<<< HEAD
     public List<String> argTypes;
     public List<ARM> arms;
 
@@ -22,36 +21,13 @@ public class InvocationLLVM implements LLVM {
          this.args = args;
          this.arms = new ArrayList<ARM>();
          this.argTypes = argTypes;
-/*
-	 if ( args.size() == 2 && args.get(0).contains("getelementptr")) {
-		System.out.println("FOUND IT");
-	}
-*/
-
-=======
-    public List<ARM> arms;
-
-    public InvocationLLVM (String result, String type, String fnptrval, List<String> args) {
-         this.result = result;
-         this.type = type;
-         this.fnptrval = fnptrval;
-         this.args = args;
-         this.arms = new ArrayList<ARM>();
-
-
-         // use pushpopArm for the stack
->>>>>>> 0c2c6e50b9c6715d581b6ae742ad8deb79f23b8b
          for (int i = 0; i < args.size(); i++) {
               arms.add(new MovesARM("MOV", "%r" + i, args.get(i)));
          }
          arms.add(new BranchARM("BL", fnptrval));
-<<<<<<< HEAD
          if (!result.equals("")) {
              arms.add(new MovesARM("MOV", result, "%r0"));
          }
-=======
-         arms.add(new MovesARM("MOV", result, "%r0"));
->>>>>>> 0c2c6e50b9c6715d581b6ae742ad8deb79f23b8b
     }
 
     public void printOut() {
@@ -90,11 +66,8 @@ public class InvocationLLVM implements LLVM {
          this.arms.addAll(arms);
     }
 
-<<<<<<< HEAD
     public List<ARM> getARMS() {
 	return arms;
     }
-=======
->>>>>>> 0c2c6e50b9c6715d581b6ae742ad8deb79f23b8b
 }
 

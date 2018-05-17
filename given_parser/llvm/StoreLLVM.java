@@ -12,20 +12,13 @@ public class StoreLLVM implements LLVM {
     public String type2;
     public List<ARM> arms;
 
-<<<<<<< HEAD
     public StoreLLVM(String type1, String value, String type2, String pointer) {
-=======
-    public StoreLLVM(String value, String type1, String pointer, String type2) {
->>>>>>> 0c2c6e50b9c6715d581b6ae742ad8deb79f23b8b
          this.value = value;
          this.type1 = type1;
          this.pointer = pointer;
          this.type2 = type2;
          this.arms = new ArrayList<ARM>();
-<<<<<<< HEAD
 	 arms.add(new LoadStoreARM("STR", value, pointer ));
-=======
->>>>>>> 0c2c6e50b9c6715d581b6ae742ad8deb79f23b8b
     }
 
     public void printOut() {

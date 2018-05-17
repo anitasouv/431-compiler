@@ -18,9 +18,7 @@ public class PhiLLVM implements LLVM {
          this.type = type;
          this.values = values;
          this.labels = labels;
-         this.arms = new ArrayList<ARM>();
-
-         
+         this.arms = new ArrayList<ARM>();         
     }
 
     public void printOut() {
@@ -49,11 +47,8 @@ public class PhiLLVM implements LLVM {
          this.arms.addAll(arms);
     }
 
-<<<<<<< HEAD
     public List<ARM> getARMS() {
 	return arms;
     }
-=======
->>>>>>> 0c2c6e50b9c6715d581b6ae742ad8deb79f23b8b
 }
 

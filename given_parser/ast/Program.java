@@ -14,12 +14,9 @@ public class Program
    private final List<Function> funcs;
    private final List<CFGNode> cfgNodes;
 
-<<<<<<< HEAD
    private boolean printLLVM;
    private boolean printARM;
 
-=======
->>>>>>> 0c2c6e50b9c6715d581b6ae742ad8deb79f23b8b
    public Program(List<TypeDeclaration> types, List<Declaration> decls,
       List<Function> funcs)
    {
@@ -129,15 +126,6 @@ public class Program
       }
       globalNode.addLLVMList(globalVarDec);
 
-<<<<<<< HEAD
-=======
-
- //     int globalBlockNum = 0;
-      for (int i = 0; i < funcs.size(); i++) {
-	 //System.out.println(funcs.get(i).getName());
-         CFGNode initNode = new CFGNode(funcs.get(i).getName(), 0);
- //        cfgNodes.add(initNode);
->>>>>>> 0c2c6e50b9c6715d581b6ae742ad8deb79f23b8b
 
 
 // print as we go
@@ -235,20 +223,12 @@ public class Program
 
 
 
-<<<<<<< HEAD
-=======
-         CFGNode startNode = new CFGNode(funcs.get(i).getName(), 1);
-         //globalBlockNum = globalBlockNum + 1;
-         startNode.addParent(initNode);
-         initNode.addChild(startNode);
->>>>>>> 0c2c6e50b9c6715d581b6ae742ad8deb79f23b8b
          cfgNodes.add(initNode);
          // CFGNode exitNode = new CFGNode(funcs.get(i).getName(), globalLabelNum, globalLabelNum, -1);
          CFGNode exitNode = new CFGNode("LU", globalLabelNum, globalLabelNum, -1, globalRegNum);
          exitNode.incrementLabelNum();
 
          // we will keep track of the Block number and Register number for LLVM reference in the exit node (since it is always passed around)
-<<<<<<< HEAD
          CFGNode lastNodeOfFunc = funcs.get(i).cfg(types, decls, funcs, funcs.get(i), startNode, exitNode);
 
          if ( lastNodeOfFunc.getLLVM().size() == 0 || !(lastNodeOfFunc.getLLVM().get(lastNodeOfFunc.getLLVM().size()-1) instanceof BranchImmLLVM)) {
@@ -299,11 +279,6 @@ public class Program
            exitNode.printOutARM();
          }
 
-=======
-         funcs.get(i).cfg(types, decls, funcs, funcs.get(i), startNode, exitNode);
-         
-         
->>>>>>> 0c2c6e50b9c6715d581b6ae742ad8deb79f23b8b
       }
 
       List<LLVM> endGlobalDec = new ArrayList<LLVM>();
@@ -360,15 +335,6 @@ public class Program
    public void printARM() {
       for (int i = 0; i < cfgNodes.size(); i++) {
          cfgNodes.get(i).printOutARM();
-<<<<<<< HEAD
-         // if (i != 0 && i != cfgNodes.size() - 1) {
-	        //    System.out.println("}\n");
-         // }
-=======
-         if (i != 0 && i != cfgNodes.size() - 1) {
-	     System.out.println("}\n");
-         }
->>>>>>> 0c2c6e50b9c6715d581b6ae742ad8deb79f23b8b
       }
    }
 }

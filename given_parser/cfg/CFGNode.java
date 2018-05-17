@@ -330,7 +330,6 @@ public class CFGNode
        }
    }
 
-<<<<<<< HEAD
    public void generateLiveOutSet() {
       
        Queue<CFGNode> q = getChildrenForPrint();
@@ -361,21 +360,5 @@ public class CFGNode
        }
 
 	return liveOutSet.equals(oldLiveOutSet);       
-=======
-   public void printOutARM() {
-       //System.out.println(name + count + ":");
-       for (int i = 0; i < llvm.size(); i++) {
-           llvm.get(i).printOutARM();
-           //if (llvm.get(i) instanceof DefineFuncLLVM) {
-           //     System.out.println("{");
-           //}
-       }
-       for (int i = 0; i < children.size(); i++) {
-           if (children.get(i).count >= this.count || children.get(i).count == -1) {
-                 System.out.println(children.get(i).getLabel());
-                 children.get(i).printOutARM();
-           } 
-       }
->>>>>>> 0c2c6e50b9c6715d581b6ae742ad8deb79f23b8b
    }
 }

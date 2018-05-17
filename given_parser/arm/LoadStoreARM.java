@@ -1,10 +1,6 @@
 package arm;
-<<<<<<< HEAD
 import java.util.Set;
 import java.util.HashSet;
-=======
-
->>>>>>> 0c2c6e50b9c6715d581b6ae742ad8deb79f23b8b
 
 public class LoadStoreARM implements ARM {
      public Operation op;
@@ -22,7 +18,6 @@ public class LoadStoreARM implements ARM {
      }
 
      public void printOut() {
-<<<<<<< HEAD
          System.out.println( "\t" + op + "\t" + reg + ", [" + addr + "]");
      }
      
@@ -35,9 +30,6 @@ public class LoadStoreARM implements ARM {
      
      public Set<String> getTargets() {
 	return new HashSet<String>();
-=======
-         System.out.println( "\t" + op + "\t" + reg + "," + addr);
->>>>>>> 0c2c6e50b9c6715d581b6ae742ad8deb79f23b8b
      }
 }
 

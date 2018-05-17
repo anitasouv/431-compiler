@@ -47,11 +47,7 @@ public class MiniCompiler
                 System.out.println(json);
             }
             if (args[i].equals("-arm")) {
-<<<<<<< HEAD
                 program.setPrintARM();
-=======
-                program.printARM();
->>>>>>> 0c2c6e50b9c6715d581b6ae742ad8deb79f23b8b
             }
          }
          program.cfg();

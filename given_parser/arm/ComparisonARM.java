@@ -1,10 +1,6 @@
 package arm;
-<<<<<<< HEAD
 import java.util.Set;
 import java.util.HashSet;
-=======
-
->>>>>>> 0c2c6e50b9c6715d581b6ae742ad8deb79f23b8b
 
 public class ComparisonARM implements ARM {
      public String reg;
@@ -18,7 +14,6 @@ public class ComparisonARM implements ARM {
      public void printOut() {
          System.out.println( "\tcmp\t" + reg + "," + operand2);
      }
-<<<<<<< HEAD
      
      public Set<String> getSources() {
         HashSet<String> sources = new HashSet<String>();
@@ -32,7 +27,5 @@ public class ComparisonARM implements ARM {
      public Set<String> getTargets() {
         return new HashSet<String>();
      }
-=======
->>>>>>> 0c2c6e50b9c6715d581b6ae742ad8deb79f23b8b
 }
 

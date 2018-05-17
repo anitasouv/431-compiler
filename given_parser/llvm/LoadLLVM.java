@@ -16,11 +16,7 @@ public class LoadLLVM implements LLVM {
          this.type = type;
          this.pointer = pointer;
          this.arms = new ArrayList<ARM>();
-<<<<<<< HEAD
-
 	 arms.add(new LoadStoreARM("LDR", pointer, result));
-=======
->>>>>>> 0c2c6e50b9c6715d581b6ae742ad8deb79f23b8b
     }
 
     public void printOut() {
@@ -42,11 +38,8 @@ public class LoadLLVM implements LLVM {
          this.arms.addAll(arms);
     }
 
-<<<<<<< HEAD
     public List<ARM> getARMS() {
 	return arms;
     }
-=======
->>>>>>> 0c2c6e50b9c6715d581b6ae742ad8deb79f23b8b
 }
 

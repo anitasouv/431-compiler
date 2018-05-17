@@ -29,9 +29,6 @@ public class DefineFuncLLVM implements LLVM {
          push.add("lr");
 
          arms.add(new PushPopARM("PUSH", push));
-<<<<<<< HEAD
-
-
          arms.add(new BinaryARM("ADD", "fp", "sp", "#" + 4));
 
          List<String> pushReg = new ArrayList<String>();
@@ -41,10 +38,6 @@ public class DefineFuncLLVM implements LLVM {
          pushReg.add("r7");
          pushReg.add("r8");
          arms.add(new PushPopARM("PUSH", pushReg));
-         
-
-=======
->>>>>>> 0c2c6e50b9c6715d581b6ae742ad8deb79f23b8b
     }
 
     public void printOut() {
@@ -76,10 +69,7 @@ public class DefineFuncLLVM implements LLVM {
          this.arms.addAll(arms);
     }
 
-<<<<<<< HEAD
     public List<ARM> getARMS() {
 	return arms;
     }
-=======
->>>>>>> 0c2c6e50b9c6715d581b6ae742ad8deb79f23b8b
 }

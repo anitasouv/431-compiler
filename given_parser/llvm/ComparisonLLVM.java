@@ -32,18 +32,10 @@ public class ComparisonLLVM implements LLVM {
               arms.add(new MovesARM("MOVGE", result, "#1"));
          } else if (cond.toLowerCase().equals("slt")) {
               arms.add(new MovesARM("MOVLT", result, "#1"));
-         } else if (cond.toLowerCase().equals("sgt")) {
-<<<<<<< HEAD
+         } else if (cond.toLowerCase().equals("sgt")) { 
               arms.add(new MovesARM("MOVGT", result, "#1"));
          } else if (cond.toLowerCase().equals("sle")) {
               arms.add(new MovesARM("MOVLE", result, "#1"));
-=======
-              arms.add(new MovesARM("MOVGE", result, "#1"));
-              arms.add(new MovesARM("MOVEQ", result, "#0"));
-         } else if (cond.toLowerCase().equals("sle")) {
-              arms.add(new MovesARM("MOVLT", result, "#1"));
-              arms.add(new MovesARM("MOVEQ", result, "#1"));
->>>>>>> 0c2c6e50b9c6715d581b6ae742ad8deb79f23b8b
          }
     }
 
@@ -52,11 +44,6 @@ public class ComparisonLLVM implements LLVM {
          System.out.println("\t" + result + " = icmp " + cond.toLowerCase() + " " + type + " " + op1 + ", " + op2 );
 
       //   System.out.println("\t" + result + " = bitcast i1 " + temp + " to i32");
-    }
-    public void printOutARM() {
-         for (int i = 0; i < arms.size(); i++) {
-              arms.get(i).printOut();
-         }
     }
     public void printOutARM() {
          for (int i = 0; i < arms.size(); i++) {
@@ -74,10 +61,7 @@ public class ComparisonLLVM implements LLVM {
          this.arms.addAll(arms);
     }
 
-<<<<<<< HEAD
     public List<ARM> getARMS() {
 	return arms;
     }
-=======
->>>>>>> 0c2c6e50b9c6715d581b6ae742ad8deb79f23b8b
 }

@@ -37,11 +37,8 @@ public class AllocationLLVM implements LLVM {
     }
 	
     // don't have to translate to arm woohoo
-<<<<<<< HEAD
     public List<ARM> getARMS() {
 	return arms;
     }
-=======
->>>>>>> 0c2c6e50b9c6715d581b6ae742ad8deb79f23b8b
 }
 
