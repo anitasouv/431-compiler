@@ -1,0 +1,14 @@
+struct foo
+{
+   int a;
+   int b;
+};
+
+fun function() void 
+{
+    struct foo i;
+    int tmp;
+
+    tmp = i.a;
+
+}

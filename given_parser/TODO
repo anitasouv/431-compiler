@@ -1,0 +1,23 @@
+<<<<<<< HEAD
+Make the header for ARM and LLVM (.com and .text etc)
+make end of function things for arm  (eg section	.rodata)
+Arm: need lower case for the instructions
+
+make script for llvm regression test needs to work (with input and output)
+fix false errors on the banchmark files
+inter graph coloring
+=======
+If statement infinite loop for print (points to itself)
+Weird double labels when printing sometimes
+Make the header for ARM and LLVM (.com and .text etc)
+make end of function things for arm  (eg section	.rodata)
+Display the arm labels of blocks corerctly (eg with the dots)
+fix print statement in ARM
+
+>>>>>>> 0c2c6e50b9c6715d581b6ae742ad8deb79f23b8b
+
+notes:
+ARM: always declare the __aeabi_idiv
+
+Load is empty, haven't implemented Store LLVM
+declare -> dont need to do?
