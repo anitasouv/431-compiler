@@ -27,17 +27,17 @@ public class DefineFuncLLVM implements LLVM {
          List<String> push = new ArrayList<String>();
          push.add("fp");
          push.add("lr");
-
          arms.add(new PushPopARM("PUSH", push));
          arms.add(new BinaryARM("ADD", "fp", "sp", "#" + 4));
 
-         List<String> pushReg = new ArrayList<String>();
-         pushReg.add("r4");
-         pushReg.add("r5");
-         pushReg.add("r6");
-         pushReg.add("r7");
-         pushReg.add("r8");
-         arms.add(new PushPopARM("PUSH", pushReg));
+
+         //List<String> pushReg = new ArrayList<String>();
+         //pushReg.add("r4");
+         //pushReg.add("r5");
+         //pushReg.add("r6");
+         //pushReg.add("r7");
+         //pushReg.add("r8");
+         //arms.add(new PushPopARM("PUSH", pushReg));
     }
 
     public void printOut() {

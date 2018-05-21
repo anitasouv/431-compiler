@@ -150,7 +150,7 @@ LU26:
 LU28:
 	%u55 = load %struct.plate** %aPlate
 	%u56 = icmp ne %struct.plate* %u55, null
-	br i1 %u56, label %LU29, label %LU27
+	br i1 %u56, label %LU29, label %LU30
 LU29:
 	%u57 = load %struct.plate** %aPlate
 	%u58 = getelementptr %struct.plate* %u57, i1 0, i32 0
@@ -195,7 +195,7 @@ LU42:
 LU36:
 	%u69 = load i32* %count
 	%u70 = icmp ne i32 %u69, 0
-	br i1 %u70, label %LU37, label %LU34
+	br i1 %u70, label %LU37, label %LU38
 LU37:
 	%u71 = call i8* @malloc(i32 8)
 	%u72 = bitcast i8* %u71 to %struct.plate*
@@ -241,7 +241,7 @@ LU38:
 LU39:
 	%u104 = load %struct.plate** @peg3
 	%u105 = icmp ne %struct.plate* %u104, null
-	br i1 %u105, label %LU40, label %LU34
+	br i1 %u105, label %LU40, label %LU41
 LU40:
 	%u106 = load %struct.plate** @peg3
 	store %struct.plate* %u106, %struct.plate** %aPlate

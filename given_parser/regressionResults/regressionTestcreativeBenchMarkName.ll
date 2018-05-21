@@ -119,7 +119,7 @@ LU7:
 LU9:
 	%u61 = load i32* %i
 	%u62 = icmp slt i32 %u61, 5
-	br i1 %u62, label %LU10, label %LU8
+	br i1 %u62, label %LU10, label %LU11
 LU10:
 	%u63 = load i32* %product
 	%u64 = load %struct.node** %cur
@@ -172,7 +172,7 @@ LU14:
 LU16:
 	%u83 = load i32* %i
 	%u84 = icmp slt i32 %u83, 5
-	br i1 %u84, label %LU17, label %LU15
+	br i1 %u84, label %LU17, label %LU18
 LU17:
 	%u85 = load i32* %sum
 	%u86 = load %struct.node** %cur
@@ -267,7 +267,7 @@ LU28:
 LU30:
 	%u126 = load i32* %i
 	%u127 = icmp slt i32 %u126, 2
-	br i1 %u127, label %LU31, label %LU29
+	br i1 %u127, label %LU31, label %LU32
 LU31:
 	%u128 = load i32* %bigProduct
 	%u129 = load %struct.node** %list
@@ -285,7 +285,7 @@ LU32:
 LU33:
 	%u137 = load i32* %bigProduct
 	%u138 = icmp ne i32 %u137, 0
-	br i1 %u138, label %LU34, label %LU29
+	br i1 %u138, label %LU34, label %LU35
 LU34:
 	%u139 = load i32* %bigProduct
 	%u140 = sub i32 %u139, 1

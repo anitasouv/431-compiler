@@ -33,7 +33,7 @@ public class PrintStatement
        List<LLVM> inst = expression.toLLVM(types, decls, func, curFunc, startNode, exitNode);
        String resultReg = inst.get(inst.size() -1 ).getResultReg();
        List<String> args = new ArrayList<String>();
-       args.add("getelementptr inbounds ([5 x i8]*@.println,i32 0, i32 0)");
+       args.add("getelementptr inbounds ([5 x i8]*@.print,i32 0, i32 0)");
        args.add(resultReg);
 
        List<String> argTypes = new ArrayList<String>();

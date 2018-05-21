@@ -38,7 +38,7 @@ LU3:
 LU5:
 	%u13 = load i32* %num
 	%u14 = icmp sgt i32 %u13, 0
-	br i1 %u14, label %LU6, label %LU4
+	br i1 %u14, label %LU6, label %LU7
 LU6:
 	%u15 = load i32* %prev
 	%u16 = load i32* %prev
@@ -96,7 +96,7 @@ LU10:
 LU12:
 	%u37 = load %struct.linkedNums** %nums
 	%u38 = icmp ne %struct.linkedNums* %u37, null
-	br i1 %u38, label %LU13, label %LU11
+	br i1 %u38, label %LU13, label %LU14
 LU13:
 	%u39 = load i32* %num
 	%u40 = add i32 %u39, 1
@@ -153,7 +153,7 @@ LU22:
 	%u56 = load i32* %result
 	%u57 = load i32* %num
 	%u58 = icmp slt i32 %u56, %u57
-	br i1 %u58, label %LU23, label %LU21
+	br i1 %u58, label %LU23, label %LU24
 LU23:
 	%u59 = load i32* %guess
 	%u60 = load i32* %guess
@@ -185,7 +185,7 @@ LU27:
 LU29:
 	%u66 = load %struct.linkedNums** %nums
 	%u67 = icmp ne %struct.linkedNums* %u66, null
-	br i1 %u67, label %LU30, label %LU28
+	br i1 %u67, label %LU30, label %LU31
 LU30:
 	%u68 = load %struct.linkedNums** %nums
 	%u69 = getelementptr %struct.linkedNums* %u68, i1 0, i32 0
@@ -220,7 +220,7 @@ LU34:
 LU36:
 	%u77 = load %struct.linkedNums** %nums
 	%u78 = icmp ne %struct.linkedNums* %u77, null
-	br i1 %u78, label %LU46, label %LU35
+	br i1 %u78, label %LU46, label %LU47
 LU37:
 	%u79 = load i1* %first
 	br i1 %u79, label %LU38, label %LU39

@@ -570,7 +570,7 @@ LU146:
 LU147:
 	%u181 = load i32* %i1
 	%u182 = icmp slt i32 %u181, 5
-	br i1 %u182, label %LU151, label %LU53
+	br i1 %u182, label %LU151, label %LU152
 LU148:
 	%u183 = load i32* %i1
 	%u184 = icmp sge i32 %u183, 5

@@ -15,10 +15,10 @@ public class ReturnLLVM implements LLVM {
          this.type = type;
          this.arms = new ArrayList<ARM>();
 	 arms.add(new MovesARM("MOV", "%r0", value));
-         List<String> pop = new ArrayList<String>();
-         pop.add("fp");
-         pop.add("pc");
-         arms.add(new PushPopARM("POP", pop));
+        // List<String> pop = new ArrayList<String>();
+        // pop.add("fp");
+        // pop.add("pc");
+        // arms.add(new PushPopARM("POP", pop));
     }
 
     public void printOut() {

@@ -96,7 +96,7 @@ LU19:
 	%u30 = getelementptr %struct.IntList* %u29, i1 0, i32 1
 	%u31 = load %struct.IntList** %u30
 	%u32 = icmp ne %struct.IntList* %u31, null
-	br i1 %u32, label %LU20, label %LU18
+	br i1 %u32, label %LU20, label %LU21
 LU20:
 	%u33 = load i32* %big
 	%u34 = load %struct.IntList** %list

@@ -40,7 +40,7 @@ LU7:
 LU9:
 	%u7 = load i32* %swapped
 	%u8 = icmp eq i32 %u7, 1
-	br i1 %u8, label %LU16, label %LU8
+	br i1 %u8, label %LU16, label %LU17
 LU10:
 	store i32 0, i32* %swapped
 	%u9 = load %struct.Node** %head
@@ -52,7 +52,7 @@ LU11:
 	%u12 = load %struct.Node** %u11
 	%u13 = load %struct.Node** %head
 	%u14 = icmp ne %struct.Node* %u12, %u13
-	br i1 %u14, label %LU15, label %LU8
+	br i1 %u14, label %LU15, label %LU16
 LU12:
 	%u15 = load %struct.Node** %currNode
 	%u16 = load %struct.Node** %currNode
@@ -120,7 +120,7 @@ LU22:
 	%u47 = load %struct.Node** %currNode
 	%u48 = load %struct.Node** %head
 	%u49 = icmp ne %struct.Node* %u47, %u48
-	br i1 %u49, label %LU23, label %LU21
+	br i1 %u49, label %LU23, label %LU24
 LU23:
 	%u50 = load %struct.Node** %currNode
 	store %struct.Node* %u50, %struct.Node** %toFree
@@ -195,7 +195,7 @@ LU31:
 LU32:
 	%u82 = load i32* %counter
 	%u83 = icmp sgt i32 %u82, 0
-	br i1 %u83, label %LU33, label %LU28
+	br i1 %u83, label %LU33, label %LU34
 LU33:
 	%u84 = call i8* @malloc(i32 12)
 	%u85 = bitcast i8* %u84 to %struct.Node*

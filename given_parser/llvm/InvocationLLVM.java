@@ -21,6 +21,19 @@ public class InvocationLLVM implements LLVM {
          this.args = args;
          this.arms = new ArrayList<ARM>();
          this.argTypes = argTypes;
+	/* if (args.get(1).contains("getelementptr")) {
+              arms.add(new MovesARM("MOVW", "%r" + 1, "#:lower16:.read_scratch"));
+              arms.add(new MovesARM("MOVT", "%r" + 1, "#:upper16:.read_scratch"));
+              arms.add(new MovesARM("MOVW", "%r" + 0, "#:lower16:.READ_FMT"));
+              arms.add(new MovesARM("MOVT", "%r" + 0, "#:upper16:.READ_FMT"));	
+          
+ 	      arms.add(new BranchARM("BL", fnptrval));
+
+              arms.add(new MovesARM("MOVW", result, "#:lower16:.read_scratch"));
+              arms.add(new MovesARM("MOVT", result, "#:upper16:.read_scratch"));
+	 }
+*/
+
          for (int i = 0; i < args.size(); i++) {
               arms.add(new MovesARM("MOV", "%r" + i, args.get(i)));
          }

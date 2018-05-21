@@ -11,7 +11,7 @@ LU3:
 LU5:
 	%u0 = load i32* %waitTime
 	%u1 = icmp sgt i32 %u0, 0
-	br i1 %u1, label %LU6, label %LU4
+	br i1 %u1, label %LU6, label %LU7
 LU6:
 	%u2 = load i32* %waitTime
 	%u3 = sub i32 %u2, 1
@@ -41,7 +41,7 @@ LU10:
 LU12:
 	%u4 = load i32* %exponent
 	%u5 = icmp sgt i32 %u4, 0
-	br i1 %u5, label %LU13, label %LU11
+	br i1 %u5, label %LU13, label %LU14
 LU13:
 	%u6 = load i32* %product
 	%u7 = load i32* %base
@@ -169,7 +169,7 @@ LU31:
 LU33:
 	%u50 = load i32* %waitTime
 	%u51 = icmp sgt i32 %u50, 0
-	br i1 %u51, label %LU34, label %LU32
+	br i1 %u51, label %LU34, label %LU35
 LU34:
 	%u52 = load i32* %waitTime
 	%u53 = call i32 @wait(i32 %u52)

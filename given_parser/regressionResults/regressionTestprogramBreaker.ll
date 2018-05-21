@@ -107,7 +107,7 @@ LU20:
 LU22:
 	%u36 = load i32* %i
 	%u37 = icmp slt i32 %u36, 10000
-	br i1 %u37, label %LU23, label %LU21
+	br i1 %u37, label %LU23, label %LU24
 LU23:
 	%u38 = load i32* %i
 	%u39 = call i32 @fun1(i32 3, i32 %u38, i32 5)

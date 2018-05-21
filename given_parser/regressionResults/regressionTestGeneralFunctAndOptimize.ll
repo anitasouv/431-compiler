@@ -114,7 +114,7 @@ LU14:
 LU16:
 	%u47 = load i32* %countOuter
 	%u48 = icmp slt i32 %u47, 50
-	br i1 %u48, label %LU23, label %LU15
+	br i1 %u48, label %LU23, label %LU24
 LU17:
 	store i32 0, i32* %countInner
 	br label %LU18
@@ -122,7 +122,7 @@ LU18:
 	%u49 = load i32* %countInner
 	%u50 = load i32* @end
 	%u51 = icmp sle i32 %u49, %u50
-	br i1 %u51, label %LU22, label %LU15
+	br i1 %u51, label %LU22, label %LU23
 LU19:
 	%u52 = mul i32 1, 2
 	%u53 = mul i32 %u52, 3

@@ -26,7 +26,7 @@ LU8:
 	%u4 = load i32* %n
 	%u5 = mul i32 %u3, %u4
 	%u6 = icmp slt i32 %u2, %u5
-	br i1 %u6, label %LU9, label %LU4
+	br i1 %u6, label %LU9, label %LU10
 LU9:
 	%u7 = load i32* %i
 	%u8 = load i32* %n

@@ -98,7 +98,7 @@ LU14:
 LU16:
 	%u39 = load i32* %num
 	%u40 = icmp sgt i32 %u39, 0
-	br i1 %u40, label %LU17, label %LU15
+	br i1 %u40, label %LU17, label %LU18
 LU17:
 	%u41 = load %struct.foo** %math1
 	%u42 = getelementptr %struct.foo* %u41, i1 0, i32 0
@@ -160,7 +160,7 @@ LU21:
 LU23:
 	%u78 = load i32* %num
 	%u79 = icmp sgt i32 %u78, 0
-	br i1 %u79, label %LU24, label %LU22
+	br i1 %u79, label %LU24, label %LU25
 LU24:
 	%u80 = call i8* @malloc(i32 12)
 	%u81 = bitcast i8* %u80 to %struct.foo*

@@ -16,7 +16,7 @@ LU5:
 	%u0 = load i32* %square
 	%u1 = load i32* %a
 	%u2 = icmp sle i32 %u0, %u1
-	br i1 %u2, label %LU6, label %LU4
+	br i1 %u2, label %LU6, label %LU7
 LU6:
 	%u3 = load i32* %square
 	%u4 = load i32* %delta
@@ -66,7 +66,7 @@ LU14:
 	%u16 = load i32* %divisor
 	%u17 = load i32* %max
 	%u18 = icmp sle i32 %u16, %u17
-	br i1 %u18, label %LU18, label %LU11
+	br i1 %u18, label %LU18, label %LU19
 LU15:
 	%u19 = load i32* %a
 	%u20 = load i32* %a
@@ -114,7 +114,7 @@ LU25:
 	%u32 = load i32* %a
 	%u33 = load i32* %limit
 	%u34 = icmp sle i32 %u32, %u33
-	br i1 %u34, label %LU29, label %LU24
+	br i1 %u34, label %LU29, label %LU30
 LU26:
 	%u35 = load i32* %a
 	%u36 = call i1 @prime(i32 %u35)

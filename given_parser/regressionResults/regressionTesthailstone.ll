@@ -32,7 +32,7 @@ LU6:
 LU7:
 	br label %LU9
 LU9:
-	br i1 1, label %LU16, label %LU8
+	br i1 1, label %LU16, label %LU17
 LU10:
 	%u7 = load i32* %n
 	%u8 = call i32 (i8*, ... )* @printf(i8* getelementptr inbounds ([5 x i8]*@.println,i32 0, i32 0), i32 %u7)

@@ -288,7 +288,7 @@ LU15:
 LU17:
 	%u155 = load i32* %number
 	%u156 = icmp sgt i32 %u155, 0
-	br i1 %u156, label %LU18, label %LU16
+	br i1 %u156, label %LU18, label %LU19
 LU18:
 	%u157 = load i32* %total
 	%u158 = load i32* %number
@@ -735,7 +735,7 @@ LU43:
 LU45:
 	%u449 = load i32* %i
 	%u450 = icmp slt i32 %u449, 1000000
-	br i1 %u450, label %LU46, label %LU44
+	br i1 %u450, label %LU46, label %LU47
 LU46:
 	store i32 5, i32* %e
 	%u451 = load i32* %a
@@ -959,7 +959,7 @@ LU79:
 LU81:
 	%u520 = load i32* %a
 	%u521 = icmp slt i32 %u520, 1000000
-	br i1 %u521, label %LU85, label %LU80
+	br i1 %u521, label %LU85, label %LU86
 LU82:
 	%u522 = load i32* %b
 	%u523 = icmp eq i32 %u522, 2
@@ -1007,7 +1007,7 @@ LU91:
 	%u529 = load i32* %i
 	%u530 = load i32* %number
 	%u531 = icmp slt i32 %u529, %u530
-	br i1 %u531, label %LU92, label %LU90
+	br i1 %u531, label %LU92, label %LU93
 LU92:
 	store i32 4, i32* %a
 	store i32 7, i32* %b
@@ -1077,7 +1077,7 @@ LU98:
 	%u557 = load i32* %i
 	%u558 = load i32* %number
 	%u559 = icmp slt i32 %u557, %u558
-	br i1 %u559, label %LU99, label %LU97
+	br i1 %u559, label %LU99, label %LU100
 LU99:
 	%u560 = load i32* %result
 	%u561 = load i32* %previous
@@ -1153,7 +1153,7 @@ LU112:
 	%u585 = load i32* %i
 	%u586 = load i32* %input
 	%u587 = icmp slt i32 %u585, %u586
-	br i1 %u587, label %LU113, label %LU111
+	br i1 %u587, label %LU113, label %LU114
 LU113:
 	%u588 = call i32 @constantFolding()
 	store i32 %u588, i32* %result

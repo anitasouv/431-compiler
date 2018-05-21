@@ -52,17 +52,20 @@ public class WhileStatement
       CFGNode bodyNode = new CFGNode( startNode.name, exitNode.labelCountAndIncrement(), 0, 0, 0);
       guardNode.addChild(bodyNode);
       bodyNode.addParent(guardNode);
-      
-      bodyNode = body.cfg(types, decls, func, curFunc, bodyNode, exitNode);
-      bodyNode.addChild(guardNode);
-      guardNode.addParent(bodyNode);
 
       CFGNode endNode = new CFGNode(startNode.name, exitNode.labelCountAndIncrement(), 0, 0, 0);
       endNode.addParent(guardNode);
       guardNode.addChild(endNode);   
 
       // String op = ((BinaryExpression) guard).getOp();
-      guardNode.addLLVM(new BranchLLVM( compareReg , bodyNode.name + bodyNode.blockNum, exitNode.name + exitNode.blockNum));
+      guardNode.addLLVM(new BranchLLVM( compareReg , bodyNode.name + bodyNode.blockNum, endNode.name + endNode.blockNum));
+
+
+      
+      bodyNode = body.cfg(types, decls, func, curFunc, bodyNode, exitNode);
+      bodyNode.addChild(guardNode);
+      guardNode.addParent(bodyNode);
+
       bodyNode.addLLVM(new BranchImmLLVM(guardNode.name + guardNode.blockNum));
 
       return endNode;

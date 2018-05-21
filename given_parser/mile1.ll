@@ -16,7 +16,7 @@ LU3:
 LU5:
 	%u0 = load i32* %exp
 	%u1 = icmp sgt i32 %u0, 0
-	br i1 %u1, label %LU6, label %LU7
+	br i1 %u1, label %LU6, label %LU4
 LU6:
 	%u2 = load i32* %result
 	%u3 = load i32* %base
@@ -79,7 +79,7 @@ LU14:
 LU15:
 	%u23 = load i32* %i
 	%u24 = icmp slt i32 %u23, 1000000
-	br i1 %u24, label %LU16, label %LU17
+	br i1 %u24, label %LU16, label %LU11
 LU16:
 	%u25 = load i32* %i
 	%u26 = add i32 %u25, 1

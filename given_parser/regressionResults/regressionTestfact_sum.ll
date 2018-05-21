@@ -82,7 +82,7 @@ LU19:
 	%u22 = load i32* %flag
 	%u23 = sub i32 0, 1
 	%u24 = icmp ne i32 %u22, %u23
-	br i1 %u24, label %LU20, label %LU18
+	br i1 %u24, label %LU20, label %LU21
 LU20:
 	%u25 = call i32 (i8*, ... )*  @scanf(i8* getelementptr inbounds ([4 x i8]*@.read, i32 0, i32 0), i32* @_scanned_)
 	%u26 = load i32* @_scanned_

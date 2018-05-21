@@ -165,8 +165,6 @@ public class Program
 
          initNode.addLLVM(funcDef);
 
-
-         // CFGNode allocateNode = new CFGNode(funcs.get(i).getName(), globalLabelNum, 0, 0);
          CFGNode allocateNode = new CFGNode("LU", globalLabelNum, 0, 0, 0);
          globalLabelNum++;
 
@@ -185,7 +183,6 @@ public class Program
               } else {
                   localVars.add(new AllocationLLVM( "%" +funcs.get(i).getDecls().get(j).getName(), funcs.get(i).getDecls().get(j).getType().toLLVMType()));
               }
-              //localVars.add(new AllocationLLVM( "%" +funcs.get(i).getDecls().get(j).getName(), funcs.get(i).getDecls().get(j).getType().toLLVMType()));
          }
 
          for (int j = 0; j < funcs.get(i).getParams().size(); j++) {
@@ -211,7 +208,6 @@ public class Program
          initNode.addChild(allocateNode);
          allocateNode.addParent(initNode);
 
-         // CFGNode startNode = new CFGNode(funcs.get(i).getName(), globalLabelNum, 0, 0);
          CFGNode startNode = new CFGNode("LU", globalLabelNum, 0, 0, 0);
          globalLabelNum = globalLabelNum + 1;
 
@@ -222,9 +218,7 @@ public class Program
          allocateNode.addLLVM(new BranchImmLLVM(startNode.name + startNode.blockNum));
 
 
-
          cfgNodes.add(initNode);
-         // CFGNode exitNode = new CFGNode(funcs.get(i).getName(), globalLabelNum, globalLabelNum, -1);
          CFGNode exitNode = new CFGNode("LU", globalLabelNum, globalLabelNum, -1, globalRegNum);
          exitNode.incrementLabelNum();
 
@@ -250,13 +244,13 @@ public class Program
 
 	 LLVM closureThings = new NOPLLVM("for the ", "end closures");
 
-	 List<String> reg = new ArrayList<String>();
-         reg.add("r4");
-         reg.add("r5");
-         reg.add("r6");
-         reg.add("r7");
-         reg.add("r8");
-         closureThings.addARM(new PushPopARM("POP", reg));
+	 //List<String> reg = new ArrayList<String>();
+         //reg.add("r4");
+         //reg.add("r5");
+         //reg.add("r6");
+         //reg.add("r7");
+         //reg.add("r8");
+         //closureThings.addARM(new PushPopARM("POP", reg));
 
 	 List<String> r = new ArrayList<String>();
          r.add("fp");

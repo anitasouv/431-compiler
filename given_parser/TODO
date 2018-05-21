@@ -6,7 +6,12 @@ Make the header for ARM and LLVM (.com and .text etc)
 make end of function things for arm  (eg section	.rodata)
 Arm: need lower case for the instructions
 
-inter graph coloring
+need to redirect output to the input files and diff it with test output (LLVM)
+figure out loading from stack space and also local space
+
+
+
+clean up the checks for sturct and change the struct type to pass back *
 
 notes:
 ARM: always declare the __aeabi_idiv

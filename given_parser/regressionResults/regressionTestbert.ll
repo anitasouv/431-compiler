@@ -35,7 +35,7 @@ LU8:
 	%u5 = getelementptr %struct.node* %u4, i1 0, i32 1
 	%u6 = load %struct.node** %u5
 	%u7 = icmp ne %struct.node* %u6, null
-	br i1 %u7, label %LU9, label %LU4
+	br i1 %u7, label %LU9, label %LU10
 LU9:
 	%u8 = load %struct.node** %temp
 	%u9 = getelementptr %struct.node* %u8, i1 0, i32 1
@@ -442,7 +442,7 @@ LU84:
 LU85:
 	%u167 = load %struct.node** %temp
 	%u168 = icmp ne %struct.node* %u167, null
-	br i1 %u168, label %LU89, label %LU81
+	br i1 %u168, label %LU89, label %LU90
 LU86:
 	%u169 = load %struct.node** %list
 	%u170 = load i32* %i
@@ -713,7 +713,7 @@ LU135:
 	%u292 = load %struct.node** %list
 	%u293 = call i32 @size(%struct.node* %u292)
 	%u295 = icmp slt i32 %u291, %u293
-	br i1 %u295, label %LU136, label %LU134
+	br i1 %u295, label %LU136, label %LU137
 LU136:
 	%u296 = load %struct.tnode** %root
 	%u297 = load %struct.node** %list
@@ -901,7 +901,7 @@ LU151:
 LU153:
 	%u433 = load i32* %i
 	%u434 = icmp slt i32 %u433, 10
-	br i1 %u434, label %LU154, label %LU152
+	br i1 %u434, label %LU154, label %LU155
 LU154:
 	%u435 = call i32 (i8*, ... )*  @scanf(i8* getelementptr inbounds ([4 x i8]*@.read, i32 0, i32 0), i32* @_scanned_)
 	%u436 = load i32* @_scanned_

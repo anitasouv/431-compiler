@@ -42,7 +42,7 @@ public class CFGNode
    public Set<String> oldLiveOutSet;
 
    public Map< String, Set<String> > interGraph;
-
+   public Map<String, Integer> coloredRegisters;
 
    public CFGNode(String name, int blockNum, int labelCount, int returnOrNah, int regNumCurrent) {
       this.name = name;
@@ -64,6 +64,7 @@ public class CFGNode
       this.oldLiveOutSet = new HashSet<String>();
 
       this.interGraph = new HashMap<>();
+      this.coloredRegisters = new HashMap<>();
    }
 
    public boolean checkIfPrinted() {
@@ -226,30 +227,170 @@ public class CFGNode
 
       while (reallyDone.size() > 0) {
           current = reallyDone.remove();
+	  // need to add edges bi-directionally
+	  current.completeInterGraph();
           current.printAllSets();
+	  current.colorGraph();
       }
 
+// at this point all nodes' graphs are made
+// now to do the coloring
+
+      
+
+   }
+
+   public void completeInterGraph() {
+	Map<String, Set<String>> tempGraph = new HashMap<String, Set<String>>();
+	Set<String> edges = null;
+	String k = "";
+	for (Map.Entry<String, Set<String>> entry : interGraph.entrySet()) {
+		for ( String element : entry.getValue()) {
+			edges = interGraph.get(element);
+		
+			// if edges does not contain entry.getKey then add it
+			k = entry.getKey();
+			if (edges == null) {
+				if (tempGraph.get(element) == null) {
+					tempGraph.put(element, new HashSet<String>());
+				}
+				tempGraph.get(element).add(k);
+			} else if (!edges.contains(k)) {
+				interGraph.get(element).add(k);
+			}
+		}
+	}
+	interGraph.putAll(tempGraph);
+   }
+
+   public void colorGraph() {
+	Map<String, Set<String>> tempGraph = new HashMap<String, Set<String>>();
+	Queue<String> q = new LinkedList<String>();
+	int key = 0;
+	List<String> keys = new ArrayList<String>();
+	List<Set<String>> values = new ArrayList<Set<String>>();
+	for(Map.Entry<String, Set<String>> map : interGraph.entrySet()) {
+		keys.add(new String (map.getKey()));
+		values.add(new HashSet<String>(map.getValue()));
+	}
+	Set<String> old = null;
+	String s = "";
+	int indexToRemove = 0;
+	int idx = 0;
+	while (!keys.isEmpty()) {
+	   for(int i = 0; i < keys.size(); i++) {
+		if(values.get(i).size() == 0) {
+			q.add(keys.get(i));
+			indexToRemove = i;
+
+
+			i = -1;
+		} else {
+			key = findLowestNumberOfEdges(values);
+			q.add(keys.get(key));
+			indexToRemove = key;
+
+			//keys.remove(key);
+			//old = values.remove(key);
+			i = -1;
+		}
+		s = keys.remove(indexToRemove);
+		old = values.remove(indexToRemove);
+		for (String value : old ) {
+			idx = keys.indexOf(value);
+			if (idx >= 0) {
+				values.get(idx).remove(s);
+			}
+		}
+		
+	   }
+	}
+
+	Set<String> edges = null;
+	int color = 0 ;
+	String cur = "";
+	while (!q.isEmpty()) {
+	   cur = q.remove();
+
+	   edges = interGraph.get(cur);
+	   // check all edges in the tempGraph, if there are registers, make sure cur does not get that color
+	   for (String edge : edges) {
+		if (tempGraph.get(edge) != null && ((coloredRegisters.get(edge)) == color) ) { // if this register is already in the graph
+			// check the color that it is
+			color = coloredRegisters.get(edge) + 1;
+		}
+	   }
+System.out.println("Coloring " + cur + " as " + color);
+	   coloredRegisters.put(cur, color);
+
+	   tempGraph.put(cur, edges); 
+           color = 0;
+	}
+	// now queue is filled with correct order of nodes to look at
+	// for each node we add it to the graph and color it (separate list)
+	// while looking at the old graph with the old edges to color
+   }
+
+   public int findLowestNumberOfEdges( List<Set<String>> values ) {
+	//Map.Entry<String, Set<String>> lowest = graph.entrySet().iterator().next();
+	int index = 0;
+	for (int i = 0; i < values.size(); i++) {
+		if (values.get(i).size() < values.get(index).size()) {
+			index = i;
+		}
+	}
+	return index;
    }
 
    public void makeInterGraph() {
 //System.out.println("												In interfereGraph");
         Set<String> temp = null;
         Set<String> temp2 = null;
+	Set<String> ids = null;
+	Set<String> hardCoded = new HashSet<String>();
+	hardCoded.add("fp");
+	hardCoded.add("pc");
+	hardCoded.add("sp");
+	hardCoded.add("%r0");
+	hardCoded.add("%lr");
 	for (int i = llvm.size() - 1; i >= 0; i--) {
 		for(int j = llvm.get(i).getARMS().size() - 1; j >= 0; j--) {
                         temp = new HashSet<String>();
                         temp.addAll(llvm.get(i).getARMS().get(j).getTargets());
+			temp.removeAll(hardCoded);
 			temp2 = new HashSet<String>() ;
 			temp2.addAll(liveOutSet);
                         temp2.removeAll(temp);
-
+			temp2.removeAll(hardCoded);
+			/*boolean flag = true;
+			ids = new HashSet<String>();
+			for (String s: temp2) {
+				for(int a = 2; a < s.length(); a++) {
+					if(!Character.isDigit(s.charAt(a))) { flag = false; }
+				}
+				if(!(s.contains("%u") && flag)) {
+					ids.add(s);
+				}
+				flag = true;
+			}
+			temp2.removeAll(ids);
 			for (String s : temp) {
-//System.out.println("adding: " + s );
-				interGraph.put(s, temp2);
+				for(int a = 2; a < s.length(); a++) {
+					if(!Character.isDigit(s.charAt(a))) { flag = false; }
+				}
+				if(s.contains("%u") && flag) {
+					interGraph.put(s, temp2);
+				}
 			}
 
 			liveOutSet.addAll(temp);
-                }
+               */
+			//interGraph.put(, temp2);
+			for (String s : temp) {
+				interGraph.put(s, temp2);
+			}
+			liveOutSet.addAll(temp);
+		 }
         }
    }
 
@@ -344,20 +485,20 @@ public class CFGNode
    }
 
    public boolean checkLiveOutContinueHelper() {
-    return true;   
+       return true;
    }
 
    public boolean checkLiveOutContinue() {
-       Queue<CFGNode> q = getChildrenForPrint();
-       q = reverseQueue(q);
+        Queue<CFGNode> q = getChildrenForPrint();
+        q = reverseQueue(q);
 
-       CFGNode current = null;
-       while (q.size() > 0) {
-          current = q.remove();
-          if (!current.checkLiveOutContinue()) {
+        CFGNode current = null;
+        while (q.size() > 0) {
+           current = q.remove();
+           if (!current.checkLiveOutContinue()) {
               return false;
-          }
-       }
+           }
+        }
 
 	return liveOutSet.equals(oldLiveOutSet);       
    }

@@ -129,7 +129,7 @@ LU24:
 LU26:
 	%u36 = load i32* @intList
 	%u37 = icmp sgt i32 %u36, 0
-	br i1 %u37, label %LU27, label %LU25
+	br i1 %u37, label %LU27, label %LU28
 LU27:
 	%u38 = load %struct.intList** %list
 	%u39 = load i32* @intList
@@ -152,7 +152,7 @@ LU29:
 	%u52 = load %struct.intList** %list
 	%u53 = call i32 @length(%struct.intList* %u52)
 	%u55 = icmp sgt i32 %u53, 0
-	br i1 %u55, label %LU30, label %LU25
+	br i1 %u55, label %LU30, label %LU31
 LU30:
 	%u56 = load i32* %sum
 	%u57 = load %struct.intList** %list

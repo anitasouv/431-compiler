@@ -674,7 +674,7 @@ LU160:
 	%u254 = load i32* %i
 	%u255 = icmp ne i32 %u254, 8
 	%u256 = and i1 %u253, %u255
-	br i1 %u256, label %LU164, label %LU159
+	br i1 %u256, label %LU164, label %LU165
 LU161:
 	%u257 = load %struct.gameBoard** %board
 	call void @printBoard(%struct.gameBoard* %u257)
