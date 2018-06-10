@@ -2,6 +2,7 @@ package llvm;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Map;
 import arm.*;
 
 public class ComparisonLLVM implements LLVM {
@@ -45,9 +46,9 @@ public class ComparisonLLVM implements LLVM {
 
       //   System.out.println("\t" + result + " = bitcast i1 " + temp + " to i32");
     }
-    public void printOutARM() {
+    public void printOutARM(Map<String, Integer> map) {
          for (int i = 0; i < arms.size(); i++) {
-              arms.get(i).printOut();
+              arms.get(i).printOut(map);
          }
     }
 

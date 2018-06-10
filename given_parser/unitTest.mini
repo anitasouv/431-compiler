@@ -1,0 +1,71 @@
+struct simple
+{
+    int one;
+};
+
+struct foo
+{
+    int bar;
+    bool cool;
+    struct simple simp;
+};
+
+struct foo globalfoo;
+
+fun assignment() void
+{
+    int i;
+    struct foo u; 
+    i = 0;
+    u = new foo;
+
+    u.bar = 3;
+    print u.bar endl;
+    print i endl;
+}
+
+fun testPrint() void
+{
+    print 1 endl;
+    print 3;
+}
+
+fun testRead() void
+{
+    int i;
+    i = read;
+}
+
+fun testReadThenPrint() void
+{
+    int a;
+    a = read;
+    print a;
+}
+
+fun dotExpression() void 
+{
+    struct simple d;
+    d = new simple;
+    d.one = 0;
+
+    print d.one;
+}
+
+fun functionCall() void
+{
+    dotExpression();
+}
+
+fun parameterPassing(int x, int y) void
+{
+    print x endl;
+    print y endl;
+}
+
+fun main() void
+{
+   testReadThenPrint();
+   parameterPassing(5, 6);
+   assignment();
+}

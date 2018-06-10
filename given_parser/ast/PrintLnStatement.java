@@ -41,8 +41,8 @@ public class PrintLnStatement
        argTypes.add("i8*");
        argTypes.add("i32");
 
-       LLVM call = new InvocationLLVM("%u"+ exitNode.regNum,"i32 (i8*, ... )*", "printf", args, argTypes);
-       exitNode.incrementReg(); 
+       LLVM call = new InvocationLLVM("","i32 (i8*, ... )*", "printf", args, argTypes);
+       //exitNode.incrementReg(); 
        inst.add(call);
        startNode.addLLVMList(inst);
       return startNode;

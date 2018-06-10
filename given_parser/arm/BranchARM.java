@@ -1,6 +1,7 @@
 package arm;
 import java.util.Set;
 import java.util.HashSet;
+import java.util.Map;
 
 public class BranchARM implements ARM {
      public String label;
@@ -12,11 +13,20 @@ public class BranchARM implements ARM {
      }
 
      enum Branch {
-         BEQ, BNE, BGE, BLT, B, BL
+         BEQ, BNE, BGE, BLT, B, BL;
+         @Override
+            public String toString() {
+                return name().toLowerCase();
+            }
      }
 
-     public void printOut() {
-         System.out.println( "\t" + b + "\t." + label);
+     public void printOut(Map<String, Integer> map) {
+	 String optional = "";
+	 if (b != Branch.BL ) {
+		optional = ".";
+	 }
+
+         System.out.println( "\t" + b + "\t" + optional + label);
      }
      
      public Set<String> getSources() {

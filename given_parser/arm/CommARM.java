@@ -1,6 +1,7 @@
 package arm;
 import java.util.Set;
 import java.util.HashSet;
+import java.util.Map;
 
 public class CommARM implements ARM {
      public String name;
@@ -9,7 +10,7 @@ public class CommARM implements ARM {
          this.name = name;
      }
 
-     public void printOut() {
+     public void printOut(Map<String, Integer> map) {
          System.out.println("\t.comm  " + name + ",4,4");
      }
 

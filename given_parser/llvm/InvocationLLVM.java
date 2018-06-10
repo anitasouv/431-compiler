@@ -2,6 +2,7 @@ package llvm;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Map;
 import arm.*;
 
 
@@ -33,18 +34,43 @@ public class InvocationLLVM implements LLVM {
               arms.add(new MovesARM("MOVT", result, "#:upper16:.read_scratch"));
 	 }
 */
+	 if (args.size() == 2 && args.get(0).contains("getelementptr inbounds") && args.get(1).contains("@_scanned_")) {
 
-         for (int i = 0; i < args.size(); i++) {
-              arms.add(new MovesARM("MOV", "%r" + i, args.get(i)));
-         }
-         arms.add(new BranchARM("BL", fnptrval));
-         if (!result.equals("")) {
-             arms.add(new MovesARM("MOV", result, "%r0"));
-         }
+		arms.add(new MoveSegmentsARM("%r1", "_scanned_"));
+		arms.add(new MoveSegmentsARM("%r0", ".read"));
+        	arms.add(new BranchARM("BL", fnptrval));
+		//arms.add(new MoveSegmentsARM(result, "_scanned_"));
+         	if (!result.equals("")) {
+			arms.add(new MoveSegmentsARM(result, "_scanned_"));
+             		//arms.add(new MovesARM("MOV", result, "%r0"));
+         	}
+
+	 } else if (args.size() == 2 && args.get(0).contains("getelementptr inbounds") && args.get(0).contains("@.println")) {
+
+		arms.add(new MovesARM("MOV", "%r1", args.get(1)));
+		arms.add(new MoveSegmentsARM("%r0", ".println"));
+        	arms.add(new BranchARM("BL", fnptrval));
+		
+	 } else if (args.size() == 2 && args.get(0).contains("getelementptr inbounds") && args.get(0).contains("@.print")) {
+
+        arms.add(new MovesARM("MOV", "%r1", args.get(1)));
+        arms.add(new MoveSegmentsARM("%r0", ".print"));
+            arms.add(new BranchARM("BL", fnptrval));
+        
+     } else {
+         	for (int i = 0; i < args.size(); i++) {
+              		arms.add(new MovesARM("MOV", "%r" + i, args.get(i)));
+         	}
+         	arms.add(new BranchARM("BL", fnptrval));
+         	if (!result.equals("") || !result.equals("@_scanned_")) {
+             		arms.add(new MovesARM("MOV", result, "%r0"));
+         	}
+	 }
+
     }
 
     public void printOut() {
-	if (result.equals("")) {
+	if (result.equals("") || result.equals("@_scanned_")) {
          System.out.print("\tcall " + type + " @" + fnptrval + "(");
 
 	} else {
@@ -63,9 +89,9 @@ public class InvocationLLVM implements LLVM {
 
          System.out.print(")\n");
     }
-    public void printOutARM() {
+    public void printOutARM(Map<String, Integer> map) {
          for (int i = 0; i < arms.size(); i++) {
-              arms.get(i).printOut();
+              arms.get(i).printOut(map);
          }
     }
 

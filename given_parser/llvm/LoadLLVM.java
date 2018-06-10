@@ -2,6 +2,7 @@ package llvm;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Map;
 import arm.*;
 
 public class LoadLLVM implements LLVM {
@@ -16,15 +17,21 @@ public class LoadLLVM implements LLVM {
          this.type = type;
          this.pointer = pointer;
          this.arms = new ArrayList<ARM>();
-	 arms.add(new LoadStoreARM("LDR", pointer, result));
+         if (pointer.contains("@_scanned_")) {
+           arms.add(new LoadStoreARM("LDR", result, pointer));
+         } else {
+           //arms.add(new LoadStoreARM("LDR", result, pointer));
+            arms.add(new MovesARM("MOV", result, pointer));
+         }
+
     }
 
     public void printOut() {
          System.out.println("\t" + result + " = load " + type + "* " + pointer );
     }
-    public void printOutARM() {
+    public void printOutARM(Map<String, Integer> map) {
          for (int i = 0; i < arms.size(); i++) {
-              arms.get(i).printOut();
+              arms.get(i).printOut(map);
          }
     }
 

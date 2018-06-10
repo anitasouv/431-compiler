@@ -19,6 +19,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.io.File;
 
+import arm.*;
+
 public class CFGNode
 {  
    public String name;
@@ -66,9 +68,36 @@ public class CFGNode
       this.interGraph = new HashMap<>();
       this.coloredRegisters = new HashMap<>();
    }
+ /*
+   public CFGNode(CFGNode newNode) {
+      this.name = newNode.name;
+      this.count = newNode.returnOrNah;
+      this.parents = new ArrayList<CFGNode>(newNode.getParents());
+      this.children = new ArrayList<CFGNode>(newNode.getChildren());
+      this.statements = new ArrayList<Statement>(newNode.getStatements);
+      this.guard = newNode.getGuard();
+      this.blockNum = newNode.blockNum;
+      this.regNum = newNode.regNumCurrent;
+      this.llvm = new ArrayList<LLVM>(newNode.getLLVM());
+      this.labelCount = newNode.labelCount;
+      this.printed = false;
+      this.returnOrNah = (returnOrNah == -1) ? true : false;
 
+      this.genSet = new HashSet<String>();
+      this.killSet = new HashSet<String>();
+      this.liveOutSet = new HashSet<String>();
+      this.oldLiveOutSet = new HashSet<String>();
+
+      this.interGraph = new HashMap<>();
+      this.coloredRegisters = new HashMap<>();
+   }
+*/
    public boolean checkIfPrinted() {
       return printed;
+   }
+
+   public void markNotPrinted() {
+      printed = false;
    }
 
    public void setToPrinted() {
@@ -135,6 +164,7 @@ public class CFGNode
    public Queue<CFGNode> getChildrenForPrint() {
       Queue<CFGNode> q = new LinkedList<CFGNode>();
       Queue<CFGNode> gen2 = new LinkedList<CFGNode>();
+      CFGNode temp = null;
 
       q.add(this);
       this.setToPrinted();
@@ -142,7 +172,10 @@ public class CFGNode
            if (children.get(i).returnOrNah) {
             // do nothing
            } else if ((children.get(i).blockNum >= this.blockNum && children.get(i).returnOrNah == false) && !children.get(i).checkIfPrinted()) {
-                 q.add(children.get(i));
+ 		//temp = new CFGNode(children.get(i));
+
+                q.add(children.get(i));
+
                  children.get(i).setToPrinted();
 
                 for(int j = 0; j < children.get(i).getChildren().size(); j++) {
@@ -165,7 +198,7 @@ public class CFGNode
       CFGNode current = null;
       while (q.size() > 0) {
           current = q.remove();
-          if ((current.getLLVM().size() > 0) && !((current.getLLVM().get(0) instanceof DefineFuncLLVM) || (current.getLLVM().get(0) instanceof TargetLLVM) || current.getLLVM().get(0) instanceof DeclareFuncLLVM)) {
+          if ( !(current.getLabel().contains("globals")) && !(current.getLabel().contains("end")) &&  ((current.getLLVM().size() > 0) && !((current.getLLVM().get(0) instanceof DefineFuncLLVM) || (current.getLLVM().get(0) instanceof TargetLLVM) || current.getLLVM().get(0) instanceof DeclareFuncLLVM))) {
               System.out.println(current.getLabel());
           }
 	  if (current.getLLVM().size() == 0) {
@@ -178,67 +211,345 @@ public class CFGNode
                     System.out.println("{");
                }
 	       current.generateHelper();
-           }
+          }
+	  //current.markNotPrinted();
       }
    }
 
-   public void printOutARM() {
+   public Integer getLastMin(Map<String, Integer> map) {
+      Map.Entry<String, Integer> minEntry = null;
+      for (Map.Entry<String, Integer> entry: map.entrySet() ) {
+	  if (minEntry == null || entry.getValue().compareTo(minEntry.getValue()) < 0) {
+		minEntry = entry;
+	  }
+      }
+      if (minEntry == null) {
+         return 0;
+      }
+      return minEntry.getValue();
+   }
+
+   public Map<String, Integer> getIdMapHelper(Integer lastMin) {
+	 Set<String> str = new HashSet<String>();
+	 str.addAll(this.getGenSet());
+         Map<String, Integer> ids = new HashMap<String, Integer> ();
+
+	 int i = 0;
+	 for (String s: str) {
+  // System.out.println("id map! 				" + s);
+		ids.put(s, lastMin - i-1 );
+		i++;
+	 }
+
+	 return ids;
+   }
+   public Map<String, Integer> registerAllocation() {
+      //resetChildrenFromPrint();
+      Queue<CFGNode> q = getChildrenForPrint();
+//System.out.println("Register Allocation size of children:" + q.size());
+      CFGNode current = null;
+ 
+
+
+      Map<String, Integer> largeIdMap = new HashMap<String, Integer>();
+      largeIdMap.putAll(this.getIdMapHelper(0));
+      //Map<String, Integer> currGraph = null;
+	Set<String> hardCoded = new HashSet<String>();
+	hardCoded.add("fp");
+	hardCoded.add("pc");
+	hardCoded.add("sp");
+	hardCoded.add("lr");
+  hardCoded.add("%r0");
+  hardCoded.add("%r1");
+  hardCoded.add("%r2");
+  hardCoded.add("%r3");
+      largeIdMap.keySet().removeAll(hardCoded);
+
+
+
+      Map<String, Integer> largeColorGraph = new HashMap<String, Integer>();
+      Map<String, Integer> currGraph = null;
+      while (q.size() > 0) {
+          current = q.remove();
+
+	  currGraph = new HashMap<String, Integer>(current.getColorGraph());
+	  largeColorGraph.putAll(currGraph);
+
+	  currGraph = new HashMap<String, Integer>(current.getIdMapHelper(  this.getLastMin( largeIdMap)   ));
+          // check for duplicates, pick the lowest value
+          
+	  Set<String> keysToRemove = new HashSet<String>();
+          for (Map.Entry<String, Integer> entry : currGraph.entrySet() ) {
+		if(largeIdMap.get(entry.getKey()) != null) {
+			keysToRemove.add(entry.getKey());
+		}
+	  }
+	  currGraph.keySet().removeAll(keysToRemove);
+	  currGraph.keySet().removeAll(hardCoded);
+
+	  largeIdMap.putAll(currGraph);
+      }
+
+largeColorGraph.putAll(largeIdMap);
+      return largeColorGraph;
+   }
+
+   public Map<String, Integer> getIdMap() {
+      Queue<CFGNode> q = getChildrenForPrint();
+// System.out.println("size of children:" + q.size());
+ 
+     CFGNode current = null;
+
+      Map<String, Integer> largeIdMap = new HashMap<String, Integer>();
+      largeIdMap.putAll(this.getIdMapHelper(0));
+
+      Map<String, Integer> currGraph = null;
+      Set<String> hardCoded = new HashSet<String>();
+      hardCoded.add("fp");
+      hardCoded.add("pc");
+      hardCoded.add("sp");
+      hardCoded.add("lr");
+      hardCoded.add("%r0");
+      hardCoded.add("%r1");
+      hardCoded.add("%r2");
+      hardCoded.add("%r3");
+      largeIdMap.keySet().removeAll(hardCoded);
+      while (q.size() > 0) {
+          current = q.remove();
+  // System.out.println("id map! " + current.name + current.blockNum);
+    //  System.out.println();
+      //System.out.println();
+	  currGraph = new HashMap<String, Integer>(current.getIdMapHelper(  this.getLastMin( largeIdMap)   ));
+          // check for duplicates, pick the lowest value
+          
+	  Set<String> keysToRemove = new HashSet<String>();
+          for (Map.Entry<String, Integer> entry : currGraph.entrySet() ) {
+		if(largeIdMap.get(entry.getKey()) != null) {
+			keysToRemove.add(entry.getKey());
+		}
+	  }
+	  currGraph.keySet().removeAll(keysToRemove);
+	  currGraph.keySet().removeAll(hardCoded);
+
+	  largeIdMap.putAll(currGraph);
+      }
+      return largeIdMap;
+   }
+
+   public List<ARM> printOutARM(List<ARM> cleanUp) {
       Queue<CFGNode> q = getChildrenForPrint();
 //System.out.println("in printout: " + q.size());
 
       Queue<CFGNode> done = new LinkedList<CFGNode>();
       Queue<CFGNode> reallyDone = new LinkedList<CFGNode>();
       Queue<CFGNode> toMakeGraph = new LinkedList<CFGNode>();
-
-
       CFGNode current = null;
-      while (q.size() > 0) {
-          current = q.remove();
-          if (current.getLLVM().size() > 0 && !((current.getLLVM().get(0) instanceof DefineFuncLLVM) || (current.getLLVM().get(0) instanceof TargetLLVM) || current.getLLVM().get(0) instanceof DeclareFuncLLVM)) {
-              System.out.println("." + current.getLabel());
-          }
-          for (int i = 0; i < current.getLLVM().size(); i++) {
-               current.getLLVM().get(i).printOutARM();
-	       current.generateHelper();
-          }
-          //current.printAllSets();
 
-          done.add(current);
-      }
+      this.generateGenAndKill();
       this.generateLiveOutSet();
       boolean continuePlz = false;
-   while(!continuePlz) {
-      this.generateLiveOutSet();
-      while (done.size() > 0) {
-          current = done.remove();
-          toMakeGraph.add(current);
-	  continuePlz = current.checkLiveOutToContinue();
-	  if (continuePlz == false) {
-              break;
+      while(!continuePlz) {
+          this.generateLiveOutSet();
+          while (q.size() > 0) {
+              current = q.remove();
+	      current.generateGenAndKill();
+              toMakeGraph.add(current);
+	      continuePlz = current.checkLiveOutToContinue();
+	      if (continuePlz == false) {
+                  break;
+              }
           }
       }
-    }
 
+
+
+      this.makeInterGraph();
       while (toMakeGraph.size() > 0) {
-          current = toMakeGraph.remove();
-	  current.makeInterGraph();
-	  reallyDone.add(current);
+        current = toMakeGraph.remove();
+        current.makeInterGraph();
+        current.markNotPrinted();
+        reallyDone.add(current);
       }
 
+//this.printAllSets();
+      this.colorGraph();
       while (reallyDone.size() > 0) {
-          current = reallyDone.remove();
-	  // need to add edges bi-directionally
-	  current.completeInterGraph();
-          current.printAllSets();
-	  current.colorGraph();
+        current = reallyDone.remove();
+        // need to add edges bi-directionally
+        //current.completeInterGraph();
+ current.printAllSets();
+
+        current.colorGraph();
+
+        done.add(current);
+      }
+      //Map<String, Integer> idMap = this.getIdMap();
+      //System.out.println("									ids: ");
+      //System.out.println(Arrays.toString(idMap.entrySet().toArray()));	
+
+      Map<String, Integer> map = this.registerAllocation();
+      //System.out.println("All coloring map size: " + map.size());
+     // map.putAll(idMap);
+
+
+
+      // change the map to start from 0
+      for (Map.Entry<String, Integer> entry: map.entrySet() ) {
+        if (entry.getValue() < 0 ) {
+          entry.setValue((-1 * entry.getValue()) + 4);
+        } else if ( entry.getValue() > 4 ) {
+          entry.setValue( entry.getValue() + 3);
+        } else {
+          // do nothing 
+        }
       }
 
-// at this point all nodes' graphs are made
-// now to do the coloring
 
+      Map<Integer, Boolean> complete = new HashMap<Integer, Boolean>();
+      for (int i = 0; i < 30; i++) {
+        for (Map.Entry<String, Integer> entry: map.entrySet() ) {
+          if (entry.getValue() == i ) {
+            complete.put(i, true);
+          }
+        } 
+        if (complete.get(i) == null) {
+          complete.put(i, false);
+        }       
+      }
       
+      // find the first 
+      for (int i = 0; i < 30; i++) {
+        if (complete.get(i) == false) {
+          for (int j = i; j < 30; j++) {
+            if (complete.get(j) == true) {
 
+              for (Map.Entry<String, Integer> entry: map.entrySet() ) {
+                if (entry.getValue() == j ) {
+                  map.put(entry.getKey(), i);
+                  complete.put(i, true);
+                }
+              }
+              if (complete.get(i) == true) {
+                complete.put(j, false);
+                break;
+              }
+
+            }
+          }
+
+          // find the next true key
+          // set all values in "map" to be this number
+          // then set this number to be true and the other to be false
+
+        }
+      }
+
+      // fill in spaces
+
+
+      Map.Entry<String, Integer> maxEntry = null;
+      for (Map.Entry<String, Integer> entry: map.entrySet() ) {
+    	  if (maxEntry == null || entry.getValue().compareTo(maxEntry.getValue()) > 0) {
+    		  maxEntry = entry;
+    	  }
+      }
+      // Map.Entry<String, Integer> minEntry = null;
+      // for (Map.Entry<String, Integer> entry: map.entrySet() ) {
+    	 //  if (minEntry == null || entry.getValue().compareTo(minEntry.getValue()) < 0) {
+    		//   minEntry = entry;
+    	 //  }
+      // }
+
+
+
+
+
+      //System.out.println("                  map1: ");
+      //System.out.println(Arrays.toString(map.entrySet().toArray()));  
+
+      List<ARM> clean = new ArrayList<ARM>();
+      List<ARM> regAllocation = new ArrayList<ARM>();
+      int totalRoom = 0;
+      if (maxEntry != null) {
+        totalRoom = maxEntry.getValue();
+
+
+          List<String> regs = new ArrayList<String>();
+          if (totalRoom > 4) {
+            for (int i = 0; i < 5; i++) {
+               regs.add("r" + (i + 4));
+            }
+          } else {
+            for (int i = 0; i < totalRoom; i++) {
+               regs.add("r" + (i + 4));
+            }
+          }
+
+          if (regs.size() > 0) {
+              regAllocation.add( new PushPopARM("PUSH", regs));
+          }
+
+        regAllocation.add(new BinaryARM("SUB", "sp", "sp", Integer.toString((maxEntry.getValue() * 4)) ) );
+        clean.add(new BinaryARM("ADD", "sp", "sp", Integer.toString((maxEntry.getValue() * 4)  )));
+	 
+	 /* if (totalRoom > 4) {
+		int temp = totalRoom - 4;
+        	regAllocation.add(new BinaryARM("SUB", "fp", "sp", Integer.toString((temp * 4)) ) );
+        	clean.add(new BinaryARM("ADD", "fp", "sp", Integer.toString((temp * 4)  )));
+	  }
+*/
+          if (regs.size() > 0) {
+              clean.add(new PushPopARM("POP", regs));
+          }
+
+
+      }
+
+
+
+
+
+
+     System.out.println("                  map2: ");
+     System.out.println(Arrays.toString(map.entrySet().toArray()));  
+
+
+      while (done.size() > 0) {
+        current = done.remove();
+        if (!(current.getLabel().contains("globals")) && !(current.getLabel().contains("end")) && (current.getLLVM().size() > 0 && !((current.getLLVM().get(0) instanceof DefineFuncLLVM) || (current.getLLVM().get(0) instanceof TargetLLVM) || current.getLLVM().get(0) instanceof DeclareFuncLLVM))) {
+            System.out.println("." + current.getLabel());
+        }
+        for (int i = 0; i < current.getLLVM().size(); i++) {
+        	if (cleanUp != null && (current.getLLVM().get(i) instanceof NOPLLVM) && (current.getLLVM().get(i).getARMS().size() > 0) && (current.getLLVM().get(i).getARMS().get(0) instanceof PushPopARM)) {
+            for (ARM each : cleanUp) {
+              each.printOut(map);
+            }
+        	}
+
+          current.getLLVM().get(i).printOutARM(map);
+          current.generateHelper();
+        }
+        if (current.getLLVM().size() > 0 && (current.getLLVM().get(0) instanceof DefineFuncLLVM)) {
+          for (ARM each : regAllocation) {
+            each.printOut(map);
+          }
+        }
+      }
+
+      if (clean.size() > 0) {
+      	  return clean;
+      } else {
+		    return null;
+      }
    }
+
+
+   public Map<String, Integer> getColorGraph() {
+	return coloredRegisters;
+   }
+
+
+
 
    public void completeInterGraph() {
 	Map<String, Set<String>> tempGraph = new HashMap<String, Set<String>>();
@@ -313,14 +624,23 @@ public class CFGNode
 	   cur = q.remove();
 
 	   edges = interGraph.get(cur);
-	   // check all edges in the tempGraph, if there are registers, make sure cur does not get that color
-	   for (String edge : edges) {
-		if (tempGraph.get(edge) != null && ((coloredRegisters.get(edge)) == color) ) { // if this register is already in the graph
-			// check the color that it is
+	   boolean repeat = true;
+	   while(repeat) {
+		repeat = false;
+	   	// check all edges in the tempGraph, if there are registers, make sure cur does not get that color
+	   	for (String edge : edges) {
+//System.out.println("looking at the edge: " + edge + "color : " + color);
+   			if (tempGraph.get(edge) != null && ((coloredRegisters.get(edge)) == color) ) { // if this register is already in the graph
+				// check the color that it is
+//System.out.println("Increased!");
 			color = coloredRegisters.get(edge) + 1;
+			// need to go back around and increase again
+			repeat = true;
 		}
 	   }
-System.out.println("Coloring " + cur + " as " + color);
+	   
+	   }
+//System.out.println("Coloring " + cur + " as " + color);
 	   coloredRegisters.put(cur, color);
 
 	   tempGraph.put(cur, edges); 
@@ -329,6 +649,17 @@ System.out.println("Coloring " + cur + " as " + color);
 	// now queue is filled with correct order of nodes to look at
 	// for each node we add it to the graph and color it (separate list)
 	// while looking at the old graph with the old edges to color
+   }
+
+   public int findHighestNumberOfEdges( List<Set<String>> values ) {
+	//Map.Entry<String, Set<String>> lowest = graph.entrySet().iterator().next();
+	int index = 0;
+	for (int i = 0; i < values.size(); i++) {
+		if (values.get(i).size() > values.get(index).size()) {
+			index = i;
+		}
+	}
+	return index;
    }
 
    public int findLowestNumberOfEdges( List<Set<String>> values ) {
@@ -346,46 +677,27 @@ System.out.println("Coloring " + cur + " as " + color);
 //System.out.println("												In interfereGraph");
         Set<String> temp = null;
         Set<String> temp2 = null;
-	Set<String> ids = null;
+	//Set<String> ids = null;
 	Set<String> hardCoded = new HashSet<String>();
 	hardCoded.add("fp");
 	hardCoded.add("pc");
 	hardCoded.add("sp");
 	hardCoded.add("%r0");
-	hardCoded.add("%lr");
+	hardCoded.add("%r1");
+  hardCoded.add("%r2");
+  hardCoded.add("%r3");
+	hardCoded.add("lr");
 	for (int i = llvm.size() - 1; i >= 0; i--) {
 		for(int j = llvm.get(i).getARMS().size() - 1; j >= 0; j--) {
                         temp = new HashSet<String>();
                         temp.addAll(llvm.get(i).getARMS().get(j).getTargets());
+//System.out.println(temp);
+//System.out.println(Arrays.toString(temp.toArray()));
 			temp.removeAll(hardCoded);
 			temp2 = new HashSet<String>() ;
 			temp2.addAll(liveOutSet);
                         temp2.removeAll(temp);
 			temp2.removeAll(hardCoded);
-			/*boolean flag = true;
-			ids = new HashSet<String>();
-			for (String s: temp2) {
-				for(int a = 2; a < s.length(); a++) {
-					if(!Character.isDigit(s.charAt(a))) { flag = false; }
-				}
-				if(!(s.contains("%u") && flag)) {
-					ids.add(s);
-				}
-				flag = true;
-			}
-			temp2.removeAll(ids);
-			for (String s : temp) {
-				for(int a = 2; a < s.length(); a++) {
-					if(!Character.isDigit(s.charAt(a))) { flag = false; }
-				}
-				if(s.contains("%u") && flag) {
-					interGraph.put(s, temp2);
-				}
-			}
-
-			liveOutSet.addAll(temp);
-               */
-			//interGraph.put(, temp2);
 			for (String s : temp) {
 				interGraph.put(s, temp2);
 			}
@@ -439,6 +751,7 @@ System.out.println("Coloring " + cur + " as " + color);
         	current = q.remove();
 		current.generateHelper();
 //System.out.println("generating: " + current.name + current.blockNum );
+		// current.printAllSets();
         }
    }
 
@@ -459,7 +772,7 @@ System.out.println("Coloring " + cur + " as " + color);
 
    public void generateLiveOutSetHelper() {
        oldLiveOutSet = new HashSet<String>(liveOutSet);
-       liveOutSet.addAll(genSet);
+       liveOutSet.addAll(new HashSet<String>(genSet));
        Set<String> temp = null;
        Set<String> temp2 = null;
        for (int i = 0; i < children.size(); i++) {

@@ -2,6 +2,7 @@ package arm;
 
 import java.util.Set;
 import java.util.HashSet;
+import java.util.Map;
 
 
 public class AscizARM implements ARM {
@@ -11,7 +12,10 @@ public class AscizARM implements ARM {
          this.body = body;
      }
 
-     public void printOut() {
+     public void printOut(Map<String, Integer> map) {
+        if (body.charAt(0) == 'c') {
+            body = body.substring(1);
+        }
          System.out.println("\t.asciz  " + body);
      }
      

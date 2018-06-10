@@ -1,6 +1,7 @@
 package arm;
 import java.util.Set;
 import java.util.HashSet;
+import java.util.Map;
 
 public class LabelARM implements ARM {
      public String label;
@@ -9,7 +10,7 @@ public class LabelARM implements ARM {
          this.label = label;
      }
 
-     public void printOut() {
+     public void printOut(Map<String, Integer> map) {
          System.out.println( label + ":");
      }
      

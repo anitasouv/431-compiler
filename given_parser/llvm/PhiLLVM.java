@@ -2,6 +2,7 @@ package llvm;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Map;
 import arm.*;
 
 
@@ -23,7 +24,6 @@ public class PhiLLVM implements LLVM {
 
     public void printOut() {
          System.out.print("\t" + result + " = phi " + type + " " );
-         
          for (int i = 0; i < values.size(); i++) {
              System.out.print("[" + values.get(i) + ", " + labels.get(i) + "]");
          }
@@ -31,9 +31,9 @@ public class PhiLLVM implements LLVM {
         
     }
 
-    public void printOutARM() {
+    public void printOutARM(Map<String, Integer> map) {
          for (int i = 0; i < arms.size(); i++) {
-              arms.get(i).printOut();
+              arms.get(i).printOut(map);
          }
     }
 

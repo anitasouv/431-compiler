@@ -2,6 +2,7 @@ package llvm;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Map;
 import arm.*;
 
 public class GlobalDecLLVM implements LLVM {
@@ -26,7 +27,11 @@ public class GlobalDecLLVM implements LLVM {
 	 if (scope.equals("private")) {
             arms.add(new AlignARM(2));
             arms.add(new LabelARM(name));
-            arms.add(new AscizARM( body ));
+            if (name.contains("println")) {
+		arms.add(new AscizARM( "\"%ld\\n\\00\"" ));
+	    } else {
+		arms.add(new AscizARM( body ));
+	    }
 	 } else  {
             arms.add(new CommARM(name));
          }
@@ -36,9 +41,9 @@ public class GlobalDecLLVM implements LLVM {
          System.out.println("@" + name + " = " + scope + " " + space + " " + type + " " + body + ", align " + num);
     }
  
-    public void printOutARM() {
+    public void printOutARM(Map<String, Integer> map) {
          for (int i = 0; i < arms.size(); i++) {
-              arms.get(i).printOut();
+              arms.get(i).printOut(map);
          }
     }
 

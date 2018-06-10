@@ -3,6 +3,7 @@ package arm;
 import java.util.List;
 import java.util.Set;
 import java.util.HashSet;
+import java.util.Map;
 
 public class PushPopARM implements ARM {
      public Operation op;
@@ -14,10 +15,15 @@ public class PushPopARM implements ARM {
      }
 
      public enum Operation {
-         PUSH, POP
+         PUSH, POP;
+
+         @Override
+            public String toString() {
+                return name().toLowerCase();
+        }
      }
 
-     public void printOut() {
+     public void printOut(Map<String, Integer> map) {
          System.out.print( "\t" + op + "\t{");
          for (int i = 0; i < listRegs.size(); i++) {
              System.out.print(listRegs.get(i));

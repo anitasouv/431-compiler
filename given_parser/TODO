@@ -6,9 +6,11 @@ Make the header for ARM and LLVM (.com and .text etc)
 make end of function things for arm  (eg section	.rodata)
 Arm: need lower case for the instructions
 
-need to redirect output to the input files and diff it with test output (LLVM)
 figure out loading from stack space and also local space
 
+
+LLVM Milstones work
+ARM -> fix the read and print statements
 
 
 clean up the checks for sturct and change the struct type to pass back *

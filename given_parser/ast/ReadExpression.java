@@ -37,8 +37,9 @@ public class ReadExpression
        argTypes.add("i8*");
        argTypes.add("i32*");
 
-       LLVM call = new InvocationLLVM("%u"+ exitNode.regNum,"i32 (i8*, ... )* ", "scanf", args, argTypes);
-       exitNode.incrementReg();
+       LLVM call = new InvocationLLVM("@_scanned_","i32 (i8*, ... )* ", "scanf", args, argTypes);
+       //LLVM call = new InvocationLLVM("%u"+ exitNode.regNum,"i32 (i8*, ... )* ", "scanf", args, argTypes);
+       //exitNode.incrementReg();
 
        LLVM move = new LoadLLVM("%u" + exitNode.regNum, "i32", "@_scanned_" );
        exitNode.incrementReg();

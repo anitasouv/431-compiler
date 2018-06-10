@@ -87,6 +87,13 @@ public class Program
 
       cfgNodes.add(globalNode);
 
+
+   LLVM begginingThings = new NOPLLVM("for the ", "begginig");
+   begginingThings.addARM(new ArchARM());
+      globalNode.addLLVM(begginingThings);
+
+
+
       List<LLVM> globalDec = new ArrayList<LLVM>();
 
 	//declarations
@@ -127,12 +134,15 @@ public class Program
       globalNode.addLLVMList(globalVarDec);
 
 
+        LLVM textThings = new NOPLLVM("for", "text label");
+        textThings.addARM(new TextARM());
+        globalNode.addLLVM(textThings);
 
 // print as we go
       if (printLLVM) {
          globalNode.printOut();
       } else if (printARM) {
-          globalNode.printOutARM();
+          globalNode.printOutARM(null);
       }
       
 
@@ -146,8 +156,8 @@ public class Program
          globalLabelNum++;
 
 	       // and func definition, local declaration
-	 List<String> funcArgs = new ArrayList<String>();
-         List<String> props = new ArrayList<String>();
+	     List<String> funcArgs = new ArrayList<String>();
+       List<String> props = new ArrayList<String>();
 
 	 String temp = "";
          for(int j = 0; j < funcs.get(i).getParams().size(); j++) {
@@ -196,7 +206,7 @@ public class Program
              // localVars.add(new AllocationLLVM( "%" +funcs.get(i).getParams().get(j).getName(), funcs.get(i).getParams().get(j).getType().toLLVMType()));
 	      temp = funcs.get(i).getParams().get(j).getType().toLLVMType();
 	      if (temp.contains("%struct")) { temp = temp + "*";}
-	      localVars.add(new StoreLLVM( temp, 
+	           localVars.add(new StoreLLVM( temp, 
 					   "%" + "_P_" + funcs.get(i).getParams().get(j).getName(),
 				           temp,
 					   "%" + funcs.get(i).getParams().get(j).getName()));
@@ -204,6 +214,34 @@ public class Program
          }
 
          allocateNode.addLLVMList(localVars);
+
+
+        LLVM parameterForARM = new NOPLLVM("for", "parameter label");
+        List<ARM> paramARM = new ArrayList<ARM>();
+        for (int j = 0; j < funcs.get(i).getParams().size(); j++) { 
+            if (j <= 3) {
+              String id = funcs.get(i).getParams().get(j).getName();
+              paramARM.add(new MovesARM("MOV",  "%" + id, "%r" + j ));
+            } else {
+              j = funcs.get(i).getParams().size();
+            }
+            // do check for after j = 3;
+        }
+
+	for (int j = 0; j < decls.size(); j++) {
+	      content = "#0";
+	   type = decls.get(j).getType().toLLVMType();
+	   if (type.contains("%struct.")) { 
+		type = type + "*";
+	   	content = "null";
+	   }
+              String id = decls.get(j).getName();
+              paramARM.add(new MovesARM("MOV",  "@" + id, content ));
+      	}
+
+        parameterForARM.addARMList(paramARM);
+        allocateNode.addLLVM(parameterForARM);
+
 
          initNode.addChild(allocateNode);
          allocateNode.addParent(initNode);
@@ -265,17 +303,24 @@ public class Program
 
 // print as we go
          if (printLLVM) {
-           initNode.printOut();
-           exitNode.printOut();
-           System.out.println("}\n");
+            initNode.printOut();
+            exitNode.printOut();
+            System.out.println("}\n");
          }else if (printARM) {
-            initNode.printOutARM();
-           exitNode.printOutARM();
+            List<ARM> cleanUp = initNode.printOutARM(null);
+            exitNode.printOutARM(cleanUp);
+	    System.out.println();
          }
+	 //initNode.registerAllocation();
 
       }
 
       List<LLVM> endGlobalDec = new ArrayList<LLVM>();
+
+
+        LLVM sectionThings = new NOPLLVM("for", "section label");
+        sectionThings.addARM(new SectionARM());
+        endGlobalDec.add(sectionThings);
 
       List<String> args = new ArrayList<String>();
       args.add("i8*");
@@ -294,9 +339,14 @@ public class Program
       endGlobalDec.add(new GlobalDecLLVM(".println", "private", "unnamed_addr", "constant [5 x i8]", "c\"%ld\\0A\\00\"", 1));
       endGlobalDec.add(new GlobalDecLLVM(".print", "private", "unnamed_addr", "constant [5 x i8]", "c\"%ld \\00\"", 1));
       endGlobalDec.add(new GlobalDecLLVM(".read", "private", "unnamed_addr", "constant [4 x i8]", "c\"%ld\\00\"", 1));
-      endGlobalDec.add(new GlobalDecLLVM(".read_scratch", "common", "global", "i32", "0", 4));
+      //endGlobalDec.add(new GlobalDecLLVM(".read_scratch", "common", "global", "i32", "0", 4));
   
       endGlobalDec.add(new GlobalDecLLVM("_scanned_", "common", "global", "i32", "0", 4));
+
+      LLVM decDivThings = new NOPLLVM("for", "div label");
+      decDivThings.addARM(new GlobalLabelARM("__aeabi_idiv"));
+      endGlobalDec.add(decDivThings);
+
 
       CFGNode lastNode = new CFGNode("end", globalLabelNum, 0, 0, 0);
       globalLabelNum++;
@@ -311,7 +361,7 @@ public class Program
       if (printLLVM) {
         lastNode.printOut();
       } else if (printARM) {
-        lastNode.printOutARM();
+        lastNode.printOutARM(null);
       }
 
    }
@@ -328,7 +378,7 @@ public class Program
 
    public void printARM() {
       for (int i = 0; i < cfgNodes.size(); i++) {
-         cfgNodes.get(i).printOutARM();
+         cfgNodes.get(i).printOutARM(null);
       }
    }
 }

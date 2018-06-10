@@ -102,7 +102,7 @@ LU14:
 LU16:
 	%u41 = load i32* %num
 	%u42 = icmp sgt i32 %u41, 0
-	br i1 %u42, label %LU17, label %LU15
+	br i1 %u42, label %LU17, label %LU18
 LU17:
 	%u43 = load %struct.foo** %math1
 	%u44 = getelementptr %struct.foo* %u43, i1 0, i32 0
@@ -164,7 +164,7 @@ LU21:
 LU23:
 	%u80 = load i32* %num
 	%u81 = icmp sgt i32 %u80, 0
-	br i1 %u81, label %LU24, label %LU22
+	br i1 %u81, label %LU24, label %LU25
 LU24:
 	%u82 = call i8* @malloc(i32 12)
 	%u83 = bitcast i8* %u82 to %struct.foo*
@@ -282,5 +282,4 @@ declare void @free(i8*)
 @.println = private unnamed_addr constant [5 x i8] c"%ld\0A\00", align 1
 @.print = private unnamed_addr constant [5 x i8] c"%ld \00", align 1
 @.read = private unnamed_addr constant [4 x i8] c"%ld\00", align 1
-@.read_scratch = common global i32 0, align 4
 @_scanned_ = common global i32 0, align 4
