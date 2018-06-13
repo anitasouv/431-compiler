@@ -1,0 +1,13 @@
+
+How to build compiler:
+ - run the script "makeJava.sh"
+ - if that does not work then run:
+      javac *.java ast/*.java cfg/*.java llvm/*.java arm/*.java
+
+To use the compiler:
+ - run:
+      java MiniCompiler <Mini file> <-llvm OR -arm> > <name of output file>
+ - "-llvm" will generate the register based llvm code
+ - "-arm"  will generate a partially working arm code of the mini file
+ - you can also optionally do "-json" for the json representation of the mini file
+ - if you would like to run all of the benchmarks you can run the file called regrScript.sh but you will need to change the folder path of the folder of benchmarks
