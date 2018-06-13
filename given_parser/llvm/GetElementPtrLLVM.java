@@ -25,7 +25,7 @@ public class GetElementPtrLLVM implements LLVM {
          int i = Integer.parseInt(index);
          
 	 //if (i != 0) {
-             arms.add(new BinaryARM("ADD", result, ptrval, "#" + i*4 ));
+             arms.add(new BinaryARM("ADD", result, ptrval, "#" + i*4, true));
 	 //}
          //arms.add(new LoadStoreARM("STR", "a0", "[" + result + "]"));
 

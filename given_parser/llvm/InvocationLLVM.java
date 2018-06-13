@@ -40,10 +40,11 @@ public class InvocationLLVM implements LLVM {
 		arms.add(new MoveSegmentsARM("%r0", ".read"));
         	arms.add(new BranchARM("BL", fnptrval));
 		//arms.add(new MoveSegmentsARM(result, "_scanned_"));
-         	if (!result.equals("")) {
-			arms.add(new MoveSegmentsARM(result, "_scanned_"));
+         	//if (!result.equals("")) {
+		//	arms.add(new MoveSegmentsARM(result, "_scanned_"));
              		//arms.add(new MovesARM("MOV", result, "%r0"));
-         	}
+         	//}
+		//arms.add(new MoveSegmentsARM(result, "_scanned_"));
 
 	 } else if (args.size() == 2 && args.get(0).contains("getelementptr inbounds") && args.get(0).contains("@.println")) {
 
@@ -62,7 +63,7 @@ public class InvocationLLVM implements LLVM {
               		arms.add(new MovesARM("MOV", "%r" + i, args.get(i)));
          	}
          	arms.add(new BranchARM("BL", fnptrval));
-         	if (!result.equals("") || !result.equals("@_scanned_")) {
+         	if (!result.equals("") && !result.equals("@_scanned_")) {
              		arms.add(new MovesARM("MOV", result, "%r0"));
          	}
 	 }

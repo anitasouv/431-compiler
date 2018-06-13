@@ -7,47 +7,51 @@ length:
 	push	{fp,lr}
 	add	fp,sp,#4
 	push	{r4,r5,r6,r7,r8}
-	movw	r9, #:lower16:20
-	movt	r9, #:upper16:20
-	sub	fp,sp,r9
+	movw	r10, #:lower16:32
+	movt	r10, #:upper16:32
+	sub	sp,sp,r10
 .LU2:
-	mov	r4,r5
-	mov	r4,%r0
-	mov	r4,#0
+	sub	r9, fp, #12
+	str	%r0, [r9]
 	b	.LU3
 .LU3:
-	mov	r4,r6
+	sub	r9, fp, #12
+	ldr	r7, [r9]
 	mov	r4,#0
-	cmp	r6,#0
+	cmp	r7,#0
 	moveq	r4,#1
 	cmp	r4,#1
 	beq	.LU5
 	b	.LU6
 .LU5:
-	mov	r4,#0
+	sub	r9, fp, #4
+	mov	r10, #0
 	b	.LU4
 .LU6:
 	b	.LU7
 .LU7:
-	mov	r4,r8
-	add	r4,r8,#4
-	sub	r9, fp, #4
-	ldr	r10, [r9]
-	mov	r4,r10
-	sub	r9, fp, #4
-	ldr	r10, [r9]
+	sub	r9, fp, #12
+	ldr	r8, [r9]
+	add	r6,r8,#4
+	ldr	r10, [r6]
+	sub	r9, fp, #16
+	str	r10, [r9]
+	sub	r10, fp, #16
+	ldr	r10, [r10]
 	mov	%r0,r10
 	bl	length
-	mov	r4,%r0
-	add	r4,r7,r4
-	mov	r4,r4
+	mov	r5,%r0
+	movw	r9, #:lower16:1
+	movt	r9, #:upper16:1
+	add	r4,r9,r5
+	sub	r9, fp, #4
 	b	.LU4
 .LU4:
-	mov	r4,r5
-	mov	%r0,r5
-	movw	r9, #:lower16:20
-	movt	r9, #:upper16:20
-	add	fp,sp,r9
+	sub	r9, fp, #4
+	mov	%r0,r4
+	movw	r10, #:lower16:32
+	movt	r10, #:upper16:32
+	add	sp,sp,r10
 	pop	{r4,r5,r6,r7,r8}
 	pop	{fp,pc}
 	.size  length, .-length
@@ -58,20 +62,26 @@ addToFront:
 	push	{fp,lr}
 	add	fp,sp,#4
 	push	{r4,r5,r6,r7,r8}
-	movw	r9, #:lower16:52
-	movt	r9, #:upper16:52
-	sub	fp,sp,r9
+	movw	r10, #:lower16:84
+	movt	r10, #:upper16:84
+	sub	sp,sp,r10
 .LU9:
-	mov	r5,r7
-	mov	r5,r6
-	mov	r5,%r0
-	mov	r5,%r1
-	mov	r4,#0
+	sub	r9, fp, #28
+	str	%r0, [r9]
+	sub	r9, fp, #20
+	str	%r1, [r9]
 	b	.LU10
 .LU10:
-	mov	r5,r8
+	sub	r9, fp, #28
+	ldr	r10, [r9]
+	sub	r9, fp, #32
+	str	r10, [r9]
 	mov	r4,#0
-	cmp	r8,#0
+	sub	r10, fp, #32
+	ldr	r10, [r10]
+	sub	r9, fp, #8
+	ldr	r9, [r9]
+	cmp	r10,r9
 	moveq	r4,#1
 	cmp	r4,#1
 	beq	.LU12
@@ -79,80 +89,95 @@ addToFront:
 .LU12:
 	mov	%r0,#8
 	bl	malloc
-	mov	r4,%r0
-	mov	r4,r4
-	mov	r5,r4
-	sub	r9, fp, #8
+	sub	r9, fp, #44
+	str	%r0, [r9]
+	sub	r10, fp, #44
+	ldr	r10, [r10]
+	mov	r8,r10
+	sub	r9, fp, #28
+	str	r8, [r9]
+	sub	r9, fp, #20
 	ldr	r10, [r9]
-	mov	r5,r10
-	sub	r9, fp, #4
+	sub	r9, fp, #40
+	str	r10, [r9]
+	sub	r9, fp, #28
 	ldr	r10, [r9]
-	mov	r5,r10
-	sub	r9, fp, #4
+	sub	r9, fp, #36
+	str	r10, [r9]
+	sub	r9, fp, #36
+	ldr	r9, [r9]
+	add	r7,r9,#0
+	sub	r10, fp, #40
+	str	r10, [r7]
+	sub	r9, fp, #28
 	ldr	r10, [r9]
-	add	r4,r10,#0
-	sub	r9, fp, #8
+	sub	r9, fp, #48
+	str	r10, [r9]
+	sub	r9, fp, #48
+	ldr	r9, [r9]
+	add	r5,r9,#4
+	sub	r10, fp, #8
+	str	r10, [r5]
+	sub	r9, fp, #28
 	ldr	r10, [r9]
-	mov	r4,r10
+	sub	r9, fp, #44
+	str	r10, [r9]
+	sub	r10, fp, #44
 	sub	r9, fp, #16
-	ldr	r10, [r9]
-	mov	r5,r10
-	sub	r9, fp, #16
-	ldr	r10, [r9]
-	add	r4,r10,#4
-	mov	r4,#0
-	sub	r9, fp, #12
-	ldr	r10, [r9]
-	mov	r5,r10
-	sub	r9, fp, #12
-	ldr	r10, [r9]
-	mov	r4,r10
 	b	.LU11
 .LU13:
 	b	.LU14
 .LU14:
 	mov	%r0,#8
 	bl	malloc
-	mov	r4,%r0
-	mov	r4,r4
-	mov	r4,r4
-	sub	r9, fp, #32
-	ldr	r10, [r9]
-	mov	r5,r10
-	sub	r9, fp, #36
-	ldr	r10, [r9]
-	mov	r4,r10
-	sub	r9, fp, #36
-	ldr	r10, [r9]
-	add	r5,r10,#0
-	sub	r9, fp, #32
-	ldr	r10, [r9]
-	mov	r5,r10
-	sub	r9, fp, #24
-	ldr	r10, [r9]
-	mov	r5,r10
+	sub	r9, fp, #48
+	str	%r0, [r9]
+	sub	r10, fp, #48
+	ldr	r10, [r10]
+	sub	r9, fp, #44
+	str	r10, [r9]
+	sub	r10, fp, #44
+	sub	r9, fp, #4
+	str	r10, [r9]
 	sub	r9, fp, #20
 	ldr	r10, [r9]
-	mov	r4,r10
-	sub	r9, fp, #20
+	sub	r9, fp, #64
+	str	r10, [r9]
+	sub	r9, fp, #4
 	ldr	r10, [r9]
-	add	r5,r10,#4
-	sub	r9, fp, #24
-	ldr	r10, [r9]
-	mov	r5,r10
+	sub	r9, fp, #68
+	str	r10, [r9]
+	sub	r9, fp, #68
+	ldr	r9, [r9]
+	add	r8,r9,#0
+	sub	r10, fp, #64
+	str	r10, [r8]
 	sub	r9, fp, #28
 	ldr	r10, [r9]
-	mov	r4,r10
-	sub	r9, fp, #28
+	sub	r9, fp, #56
+	str	r10, [r9]
+	sub	r9, fp, #4
 	ldr	r10, [r9]
-	mov	r4,r10
+	sub	r9, fp, #52
+	str	r10, [r9]
+	sub	r9, fp, #52
+	ldr	r9, [r9]
+	add	r6,r9,#4
+	sub	r10, fp, #56
+	str	r10, [r6]
+	sub	r9, fp, #4
+	ldr	r10, [r9]
+	sub	r9, fp, #60
+	str	r10, [r9]
+	sub	r10, fp, #60
+	sub	r9, fp, #16
 	b	.LU11
 .LU11:
-	mov	r4,r5
-	mov	%r0,r5
-	movw	r9, #:lower16:52
-	movt	r9, #:upper16:52
-	add	fp,sp,r9
+	sub	r9, fp, #4
+	mov	%r0,r4
+	movw	r10, #:lower16:84
+	movt	r10, #:upper16:84
+	add	sp,sp,r10
 	pop	{r4,r5,r6,r7,r8}
 	pop	{fp,pc}
 	.size  addToFront, .-addToFront
@@ -163,59 +188,58 @@ deleteFirst:
 	push	{fp,lr}
 	add	fp,sp,#4
 	push	{r4,r5,r6,r7,r8}
-	movw	r9, #:lower16:32
-	movt	r9, #:upper16:32
-	sub	fp,sp,r9
+	movw	r10, #:lower16:44
+	movt	r10, #:upper16:44
+	sub	sp,sp,r10
 .LU16:
-	mov	r6,r7
-	mov	r6,%r0
-	mov	r4,#0
+	sub	r9, fp, #20
+	str	%r0, [r9]
 	b	.LU17
 .LU17:
-	mov	r6,r8
+	sub	r9, fp, #20
+	ldr	r6, [r9]
 	mov	r4,#0
-	cmp	r8,#0
+	sub	r9, fp, #4
+	ldr	r9, [r9]
+	cmp	r6,r9
 	moveq	r4,#1
 	cmp	r4,#1
 	beq	.LU19
 	b	.LU20
 .LU19:
-	mov	r4,#0
+	sub	r10, fp, #4
+	sub	r9, fp, #8
 	b	.LU18
 .LU20:
 	b	.LU21
 .LU21:
-	sub	r9, fp, #8
-	ldr	r10, [r9]
-	mov	r6,r10
-	sub	r9, fp, #8
-	ldr	r10, [r9]
-	mov	r5,r10
-	sub	r9, fp, #16
-	ldr	r10, [r9]
-	mov	r6,r10
-	sub	r9, fp, #16
-	ldr	r10, [r9]
-	add	r5,r10,#4
+	sub	r9, fp, #20
+	ldr	r8, [r9]
 	sub	r9, fp, #12
+	str	r8, [r9]
+	sub	r9, fp, #20
 	ldr	r10, [r9]
-	mov	r5,r10
-	sub	r9, fp, #12
-	ldr	r10, [r9]
-	mov	r6,r10
-	sub	r9, fp, #4
-	ldr	r10, [r9]
-	mov	r6,r10
-	sub	r9, fp, #4
-	ldr	r10, [r9]
-	mov	r4,r10
+	sub	r9, fp, #28
+	str	r10, [r9]
+	sub	r9, fp, #28
+	ldr	r9, [r9]
+	add	r5,r9,#4
+	ldr	r10, [r5]
+	sub	r9, fp, #24
+	str	r10, [r9]
+	sub	r10, fp, #24
+	sub	r9, fp, #20
+	str	r10, [r9]
+	sub	r9, fp, #20
+	ldr	r7, [r9]
+	sub	r9, fp, #8
 	b	.LU18
 .LU18:
-	mov	r4,r5
-	mov	%r0,r5
-	movw	r9, #:lower16:32
-	movt	r9, #:upper16:32
-	add	fp,sp,r9
+	sub	r9, fp, #4
+	mov	%r0,r4
+	movw	r10, #:lower16:44
+	movt	r10, #:upper16:44
+	add	sp,sp,r10
 	pop	{r4,r5,r6,r7,r8}
 	pop	{fp,pc}
 	.size  deleteFirst, .-deleteFirst
@@ -226,11 +250,10 @@ main:
 	push	{fp,lr}
 	add	fp,sp,#4
 	push	{r4,r5,r6,r7,r8}
-	movw	r9, #:lower16:68
-	movt	r9, #:upper16:68
-	sub	fp,sp,r9
+	movw	r10, #:lower16:92
+	movt	r10, #:upper16:92
+	sub	sp,sp,r10
 .LU23:
-	mov	r5,#0
 	b	.LU24
 .LU24:
 	movw	%r1, #:lower16:_scanned_
@@ -238,68 +261,85 @@ main:
 	movw	%r0, #:lower16:.read
 	movt	%r0, #:upper16:.read
 	bl	scanf
-	movw	r4, #:lower16:_scanned_
-	movt	r4, #:upper16:_scanned_
-	ldr	r7, [r4]
-	mov	r5,r7
-	mov	r4,#0
-	mov	r6,#0
+	movw	r9, #:lower16:_scanned_
+	movt	r9, #:upper16:_scanned_
+	ldr	r8, [r9]
+	sub	r9, fp, #12
+	str	r8, [r9]
+	sub	r9, fp, #4
+	mov	r10, #0
+	str	r10, [r9]
+	sub	r10, fp, #8
+	sub	r9, fp, #20
+	str	r10, [r9]
 	b	.LU26
 .LU26:
-	mov	r5,r8
+	sub	r9, fp, #12
+	ldr	r10, [r9]
+	sub	r9, fp, #24
+	str	r10, [r9]
 	mov	r4,#0
-	cmp	r8,#0
+	sub	r10, fp, #24
+	ldr	r10, [r10]
+	cmp	r10,#0
 	movgt	r4,#1
 	cmp	r4,#1
 	beq	.LU27
 	b	.LU28
 .LU27:
-	sub	r9, fp, #8
+	sub	r9, fp, #20
 	ldr	r10, [r9]
-	mov	r6,r10
+	sub	r9, fp, #32
+	str	r10, [r9]
 	sub	r9, fp, #12
 	ldr	r10, [r9]
-	mov	r5,r10
-	sub	r9, fp, #8
-	ldr	r10, [r9]
+	sub	r9, fp, #36
+	str	r10, [r9]
+	sub	r10, fp, #32
+	ldr	r10, [r10]
 	mov	%r0,r10
-	sub	r9, fp, #12
-	ldr	r10, [r9]
+	sub	r10, fp, #36
+	ldr	r10, [r10]
 	mov	%r1,r10
 	bl	addToFront
-	mov	r4,%r0
-	mov	r6,r4
+	mov	r6,%r0
+	sub	r9, fp, #20
+	str	r6, [r9]
 	sub	r9, fp, #20
 	ldr	r10, [r9]
-	mov	r6,r10
-	sub	r9, fp, #20
-	ldr	r10, [r9]
-	add	r6,r10,#0
-	sub	r9, fp, #16
-	ldr	r10, [r9]
-	mov	r6,r10
-	sub	r9, fp, #16
-	ldr	r10, [r9]
+	sub	r9, fp, #44
+	str	r10, [r9]
+	sub	r9, fp, #44
+	ldr	r9, [r9]
+	add	r5,r9,#0
+	ldr	r10, [r5]
+	sub	r9, fp, #40
+	str	r10, [r9]
+	sub	r10, fp, #40
+	ldr	r10, [r10]
 	mov	%r1,r10
 	movw	%r0, #:lower16:.print
 	movt	%r0, #:upper16:.print
 	bl	printf
-	sub	r9, fp, #4
+	sub	r9, fp, #12
 	ldr	r10, [r9]
-	mov	r5,r10
-	sub	r9, fp, #4
-	ldr	r10, [r9]
-	movw	r9, #:lower16:1
-	movt	r9, #:upper16:1
-	sub	r4,r10,r9
-	mov	r5,r4
+	sub	r9, fp, #28
+	str	r10, [r9]
+	sub	r9, fp, #28
+	ldr	r9, [r9]
+	movw	r10, #:lower16:1
+	movt	r10, #:upper16:1
+	sub	r4,r9,r10
+	sub	r9, fp, #12
+	str	r4, [r9]
 	b	.LU26
 .LU28:
-	sub	r9, fp, #24
+	sub	r9, fp, #20
 	ldr	r10, [r9]
-	mov	r6,r10
-	sub	r9, fp, #24
-	ldr	r10, [r9]
+	sub	r9, fp, #48
+	str	r10, [r9]
+	sub	r10, fp, #48
+	ldr	r10, [r10]
 	mov	%r0,r10
 	bl	length
 	mov	r4,%r0
@@ -309,11 +349,12 @@ main:
 	bl	printf
 	b	.LU29
 .LU29:
-	sub	r9, fp, #28
+	sub	r9, fp, #20
 	ldr	r10, [r9]
-	mov	r6,r10
-	sub	r9, fp, #28
-	ldr	r10, [r9]
+	sub	r9, fp, #52
+	str	r10, [r9]
+	sub	r10, fp, #52
+	ldr	r10, [r10]
 	mov	%r0,r10
 	bl	length
 	mov	r5,%r0
@@ -324,64 +365,72 @@ main:
 	beq	.LU30
 	b	.LU31
 .LU30:
-	sub	r9, fp, #36
+	sub	r9, fp, #4
 	ldr	r10, [r9]
-	mov	r4,r10
-	sub	r9, fp, #40
+	sub	r9, fp, #68
+	str	r10, [r9]
+	sub	r9, fp, #20
 	ldr	r10, [r9]
-	mov	r6,r10
-	sub	r9, fp, #40
+	sub	r9, fp, #72
+	str	r10, [r9]
+	sub	r9, fp, #72
+	ldr	r9, [r9]
+	add	r7,r9,#0
+	ldr	r10, [r7]
+	sub	r9, fp, #60
+	str	r10, [r9]
+	sub	r9, fp, #68
+	ldr	r9, [r9]
+	sub	r10, fp, #60
+	ldr	r10, [r10]
+	add	r6,r9,r10
+	sub	r9, fp, #4
+	str	r6, [r9]
+	sub	r9, fp, #20
 	ldr	r10, [r9]
-	add	r4,r10,#0
-	sub	r9, fp, #32
-	ldr	r10, [r9]
-	mov	r4,r10
-	sub	r9, fp, #36
-	ldr	r10, [r9]
-	sub	r9, fp, #32
-	ldr	r10, [r9]
-	add	r4,r10,r10
-	mov	r4,r4
-	sub	r9, fp, #44
-	ldr	r10, [r9]
-	mov	r6,r10
-	sub	r9, fp, #44
-	ldr	r10, [r9]
+	sub	r9, fp, #56
+	str	r10, [r9]
+	sub	r10, fp, #56
+	ldr	r10, [r10]
 	mov	%r0,r10
 	bl	length
-	mov	r4,%r0
-	mov	%r1,r4
+	mov	r5,%r0
+	mov	%r1,r5
 	movw	%r0, #:lower16:.print
 	movt	%r0, #:upper16:.print
 	bl	printf
-	sub	r9, fp, #48
+	sub	r9, fp, #20
 	ldr	r10, [r9]
-	mov	r6,r10
-	sub	r9, fp, #48
-	ldr	r10, [r9]
+	sub	r9, fp, #64
+	str	r10, [r9]
+	sub	r10, fp, #64
+	ldr	r10, [r10]
 	mov	%r0,r10
 	bl	deleteFirst
 	mov	r4,%r0
-	mov	r6,r4
+	sub	r9, fp, #20
+	str	r4, [r9]
 	b	.LU29
 .LU31:
-	sub	r9, fp, #52
+	sub	r9, fp, #4
 	ldr	r10, [r9]
-	mov	r4,r10
-	sub	r9, fp, #52
-	ldr	r10, [r9]
+	sub	r9, fp, #76
+	str	r10, [r9]
+	sub	r10, fp, #76
+	ldr	r10, [r10]
 	mov	%r1,r10
 	movw	%r0, #:lower16:.println
 	movt	%r0, #:upper16:.println
 	bl	printf
-	mov	r4,#0
+	sub	r9, fp, #16
+	mov	r10, #0
 	b	.LU25
 .LU25:
-	mov	r4,r5
-	mov	%r0,r5
-	movw	r9, #:lower16:68
-	movt	r9, #:upper16:68
-	add	fp,sp,r9
+	sub	r9, fp, #4
+	mov	%r0,r4
+	movw	r10, #:lower16:92
+	movt	r10, #:upper16:92
+	add	sp,sp,r10
 	pop	{r4,r5,r6,r7,r8}
 	pop	{fp,pc}
 	.size  main, .-main
@@ -389,7 +438,7 @@ main:
 	.section	.rodata
 	.align  2
 .println:
-	.asciz  "%ld\0A\00"
+	.asciz  "%ld\n\00"
 	.align  2
 .print:
 	.asciz  "%ld \00"

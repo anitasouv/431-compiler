@@ -17,12 +17,41 @@ public class LoadLLVM implements LLVM {
          this.type = type;
          this.pointer = pointer;
          this.arms = new ArrayList<ARM>();
-         if (pointer.contains("@_scanned_")) {
+        
+	if (type.contains("*")) {
+		arms.add(new LoadStoreARM("LDR", result, pointer, true));
+	} else {
+         	arms.add(new LoadStoreARM("LDR", result, pointer));
+	}
+        /* if (pointer.contains("_scanned_")) {
            arms.add(new LoadStoreARM("LDR", result, pointer));
          } else {
            //arms.add(new LoadStoreARM("LDR", result, pointer));
             arms.add(new MovesARM("MOV", result, pointer));
-         }
+         }*/
+
+    }
+    public LoadLLVM (String result, String type, String pointer, boolean flag) {
+         this.result = result;
+         this.type = type;
+         this.pointer = pointer;
+         this.arms = new ArrayList<ARM>();
+         //arms.add(new LoadStoreARM("LDR", result, pointer));
+	if (type.contains("*")) {
+		arms.add(new LoadStoreARM("LDR", result, pointer, true));
+	} else {
+         	arms.add(new LoadStoreARM("LDR", result, pointer));
+	}
+        /* if (pointer.contains("_scanned_")) {
+           arms.add(new LoadStoreARM("LDR", result, pointer));
+         } else if (flag) {
+           arms.add(new LoadStoreARM("LDR", result, pointer));
+           //arms.add(new LoadStoreARM("LDR", pointer, result));
+		 
+	} else {
+           //arms.add(new LoadStoreARM("LDR", result, pointer));
+            arms.add(new MovesARM("MOV", result, pointer));
+         }*/
 
     }
 

@@ -19,21 +19,23 @@ public class StoreLLVM implements LLVM {
          this.pointer = pointer;
          this.type2 = type2;
          this.arms = new ArrayList<ARM>();
-	 
-	// if (!value.contains("@_scanned_")) {
-         	//arms.add(new LoadStoreARM("STR", pointer, value));
-         //	arms.add(new MovesARM("MOV", pointer, value));
-	 //}
-         if (pointer.contains("@_scanned_")) {
-           arms.add(new LoadStoreARM("STR", value, pointer));
-         } else {
-           //arms.add(new LoadStoreARM("LDR", pointer, value));
-           //arms.add(new LoadStoreARM("STR", pointer, value));
-            arms.add(new MovesARM("MOV", pointer, value));
-         }
-         	//arms.add(new MovesARM("MOV", pointer, value));
 
-         //arms.add(new LoadStoreARM("STR", value, pointer ));
+	 if (type1.contains("**") && type2.contains("*")) {
+             arms.add(new LoadStoreARM("STR", value, pointer));
+	 } else {
+           arms.add(new LoadStoreARM("STR", value, pointer));
+	}
+    }
+
+    public StoreLLVM(String type1, String value, String type2, String pointer, boolean flag) {
+         this.value = value;
+         this.type1 = type1;
+         this.pointer = pointer;
+         this.type2 = type2;
+         this.arms = new ArrayList<ARM>();
+         
+
+	arms.add(new LoadStoreARM("STR", value, pointer));
     }
 
     public void printOut() {

@@ -37,7 +37,18 @@ public class ComparisonARM implements ARM {
 			temp1 = "r" + (t+4);
 		}
 	 } else {
-		temp1 = reg;
+ 		boolean isNumber = true;
+ 		for (int i = 0; i < reg.length(); i++) {
+			if (!Character.isDigit(reg.charAt(i))) {
+				isNumber = false;
+			}
+	 	}
+		if (isNumber) {
+         		System.out.println( "\tmov\tr10, #"+ reg  );
+			temp1 = "r10";
+		} else {
+			temp1 = reg;
+		}
 	 }
 
 	 if (map.get(operand2) != null ) {

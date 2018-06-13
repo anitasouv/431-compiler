@@ -34,10 +34,7 @@ public class MovesARM implements ARM {
 			int t = map.get(reg);
 			if (t > 4) {
 				after = true;
-		 		//System.out.println( "\tsub\tr9, fp, #" + (map.get(reg)-4) * 4 ) ;
-		 		//System.out.println( "\tldr\tr10, [r9]" );
-				 
-				temp = "r10";
+				temp = "r9";
 			} else {
 				temp = "r" + (t+4);
 			}
@@ -48,10 +45,10 @@ public class MovesARM implements ARM {
 		if (map.get(operand2) != null ) {
 			int t = map.get(operand2);
 			if (t > 4) {  
-				System.out.println( "\tsub\tr9, fp, #" + (map.get(operand2)-4) * 4 ) ;
-				System.out.println( "\tldr\tr9, [r9]" );
+				System.out.println( "\tsub\tr10, fp, #" + (map.get(operand2)-4) * 4 ) ;
+				System.out.println( "\tldr\tr10, [r10]" );
 				 
-				temp1 = "r9";
+				temp1 = "r10";
 			} else {
 				temp1 = "r" + (t+4);
 			}
@@ -72,13 +69,11 @@ public class MovesARM implements ARM {
 		if (temp1.equals("null")) {
 			temp1 = "#0";
 		}
-
-        System.out.println( "\t" + m + "\t" + temp + "," + temp1);
-     //   System.out.println( "Sources: " + Arrays.toString( getSources().toArray() ) );
-      //  System.out.println( "Targets: " + Arrays.toString( getTargets().toArray() ) );
-	if (after) {
-		System.out.println( "\tsub\tr10, fp, #" + (map.get(reg)-4) * 4 ) ;
-	 	System.out.println( "\tstr\tr10, [r10]" );
+	if (after && !isNumber && !temp1.contains("#0")) {
+		System.out.println( "\tsub\tr9, fp, #" + (map.get(reg)-4) * 4 ) ;
+	 	System.out.println( "\tstr\t" + temp1 + ", [r9]" );
+	} else {
+        	System.out.println( "\t" + m + "\t" + temp + "," + temp1);
 	}
      }
      

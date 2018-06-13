@@ -43,7 +43,16 @@ public class AssignmentStatement
        String leftReg = leftInst.get(leftInst.size() - 1).getResultReg();
        String leftType = leftInst.get(leftInst.size() - 1).getResultType();
 
-       LLVM store = new StoreLLVM(resultType, resultReg, leftType, leftReg);
+       LLVM store = null;
+       if (leftInst.get(leftInst.size() - 1) instanceof GetElementPtrLLVM) {
+	  //System.out.println("HSDLKSFSF:LFSFKSKFL");
+
+       	   store = new StoreLLVM(resultType, resultReg, leftType, leftReg, true);
+       } else {
+       	   store = new StoreLLVM(resultType, resultReg, leftType, leftReg);
+       }
+       
+
 
        List<LLVM> finalList = new ArrayList<LLVM>(sourceInst);
        finalList.addAll(leftInst);

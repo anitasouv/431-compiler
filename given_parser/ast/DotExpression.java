@@ -87,17 +87,10 @@ public class DotExpression
        if (fieldType.contains("%struct.")) {
 	   fieldType = fieldType + "*";
        }
-/*
-       if (leftI.get(leftI.size() -1) instanceof GetElementPtrLLVM ) {
-           LLVM last = new LoadLLVM("%u"+ exitNode.regNum, leftType.toLLVMType(), leftReg);
-           leftReg = last.getResultReg();
-           exitNode.incrementReg();
-	}
-*/
-       LLVM inst = new GetElementPtrLLVM("%u" + exitNode.regNum, "%struct." + structName + "*", leftReg, Integer.toString(fieldIndex), fieldType );
+       LLVM inst = new GetElementPtrLLVM("%u" + exitNode.regNum, "%struct." + structName + "*", leftReg, Integer.toString(fieldIndex), fieldType);
        exitNode.incrementReg();
 
-       LLVM last = new LoadLLVM("%u"+ exitNode.regNum, fieldType, inst.getResultReg());
+       LLVM last = new LoadLLVM("%u"+ exitNode.regNum, fieldType, inst.getResultReg(), true);
        exitNode.incrementReg();
 
 

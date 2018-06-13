@@ -227,7 +227,7 @@ public class Program
             }
             // do check for after j = 3;
         }
-
+/*
 	for (int j = 0; j < decls.size(); j++) {
 	      content = "#0";
 	   type = decls.get(j).getType().toLLVMType();
@@ -238,7 +238,7 @@ public class Program
               String id = decls.get(j).getName();
               paramARM.add(new MovesARM("MOV",  "@" + id, content ));
       	}
-
+*/
         parameterForARM.addARMList(paramARM);
         allocateNode.addLLVM(parameterForARM);
 

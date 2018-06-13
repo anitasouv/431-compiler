@@ -46,6 +46,8 @@ public class CFGNode
    public Map< String, Set<String> > interGraph;
    public Map<String, Integer> coloredRegisters;
 
+   public Set<String> idsForNode;
+
    public CFGNode(String name, int blockNum, int labelCount, int returnOrNah, int regNumCurrent) {
       this.name = name;
       this.count = returnOrNah;
@@ -67,6 +69,8 @@ public class CFGNode
 
       this.interGraph = new HashMap<>();
       this.coloredRegisters = new HashMap<>();
+
+      this.idsForNode = new HashSet<String>();
    }
  /*
    public CFGNode(CFGNode newNode) {
@@ -229,6 +233,95 @@ public class CFGNode
       return minEntry.getValue();
    }
 
+
+   public Set<String> getAllIdsHelper() {
+	 Set<String> str = new HashSet<String>();
+	 str.addAll(this.getGenSet());
+	 str.addAll(this.getKillSet());
+         //Map<String, Integer> ids = new HashMap<String, Integer> ();
+/*
+	 int i = 0;
+	 for (String s: str) {
+  // System.out.println("id map! 				" + s);
+		ids.put(s, lastMin - i-1 );
+		i++;
+	 }
+*/
+	//Set<String> ids = new HashSet<String>();
+			Set<String> id = new HashSet<String>();
+			for (String s: str) {
+				if (s.length() >= 2 && s.charAt(0) == '%' && s.charAt(1) == 'u') {
+					boolean isNumber = true;
+					for (int z = 2; z < s.length(); z++) {
+						if (!Character.isDigit(s.charAt(z))) {
+							isNumber = false;
+						}
+	 				}
+	 				if (isNumber && s.length() > 2) {
+						// get keep it
+					} else {
+						id.add(s);
+					}
+				} else {
+					boolean isNumber = true;
+					for (int z = 0; z < s.length(); z++) {
+						if (!Character.isDigit(s.charAt(z))) {
+							isNumber = false;
+						}
+	 				}
+					if (!isNumber) {
+						id.add(s);
+					}
+					//id.add(s);
+				}
+			}
+
+	Set<String> hardCoded = new HashSet<String>();
+	hardCoded.add("lr");
+	hardCoded.add("fp");
+	hardCoded.add("pc");
+	hardCoded.add("sp");
+	hardCoded.add("%r0");
+	hardCoded.add("%r1");
+  hardCoded.add("%r2");
+  hardCoded.add("%r3");
+  hardCoded.add("@_scanned_");
+	id.removeAll(hardCoded);
+	
+	return id;
+   }
+
+   public Set<String> getAllIds() {
+      Queue<CFGNode> q = getChildrenForPrint();
+      CFGNode current = null;
+
+      Set<String> largeIdSet = new HashSet<String>();
+      largeIdSet.addAll(this.getAllIdsHelper());
+
+      Set<String> ids = new HashSet<String>();
+      Set<String> currIds = null;
+      while (q.size() > 0) {
+          current = q.remove();
+//System.out.println("inside getAllIds");
+	  currIds = new HashSet<String>(current.getAllIdsHelper());
+	  ids.addAll(currIds);
+
+	  largeIdSet.addAll(ids);
+      }
+	Set<String> hardCoded = new HashSet<String>();
+	hardCoded.add("lr");
+	hardCoded.add("fp");
+	hardCoded.add("pc");
+	hardCoded.add("sp");
+	hardCoded.add("%r0");
+	hardCoded.add("%r1");
+  hardCoded.add("%r2");
+  hardCoded.add("%r3");
+  hardCoded.add("@_scanned_");
+	largeIdSet.removeAll(hardCoded);
+      return largeIdSet;
+   }
+
    public Map<String, Integer> getIdMapHelper(Integer lastMin) {
 	 Set<String> str = new HashSet<String>();
 	 str.addAll(this.getGenSet());
@@ -236,7 +329,7 @@ public class CFGNode
 
 	 int i = 0;
 	 for (String s: str) {
-  // System.out.println("id map! 				" + s);
+  //System.out.println("id map! 				" + s);
 		ids.put(s, lastMin - i-1 );
 		i++;
 	 }
@@ -251,6 +344,7 @@ public class CFGNode
  
 
 
+
       Map<String, Integer> largeIdMap = new HashMap<String, Integer>();
       largeIdMap.putAll(this.getIdMapHelper(0));
       //Map<String, Integer> currGraph = null;
@@ -262,8 +356,33 @@ public class CFGNode
   hardCoded.add("%r0");
   hardCoded.add("%r1");
   hardCoded.add("%r2");
+  hardCoded.add("@_scanned_");
   hardCoded.add("%r3");
       largeIdMap.keySet().removeAll(hardCoded);
+			Set<String> id = new HashSet<String>();
+			for (String s: largeIdMap.keySet()) {
+				if (s.length() >= 2 && s.charAt(0) == '%' && s.charAt(1) == 'u') {
+					boolean isNumber = true;
+					for (int z = 2; z < s.length(); z++) {
+						if (!Character.isDigit(s.charAt(z))) {
+							isNumber = false;
+						}
+	 				}
+	 				if (isNumber && s.length() > 2) {
+						//System.out.println("Keeping: " + s);
+						// get keep it
+					} else {
+						//System.out.println("taking out: " + s);
+						id.add(s);
+						// get rid of it
+					}
+				} else {
+					//System.out.println("taking out: " + s);
+					id.add(s);
+					// get rid of it
+				}
+			}
+			largeIdMap.keySet().removeAll(id);
 
 
 
@@ -271,6 +390,7 @@ public class CFGNode
       Map<String, Integer> currGraph = null;
       while (q.size() > 0) {
           current = q.remove();
+//System.out.println("inside register alloc");
 
 	  currGraph = new HashMap<String, Integer>(current.getColorGraph());
 	  largeColorGraph.putAll(currGraph);
@@ -286,6 +406,30 @@ public class CFGNode
 	  }
 	  currGraph.keySet().removeAll(keysToRemove);
 	  currGraph.keySet().removeAll(hardCoded);
+			id = new HashSet<String>();
+			for (String s: currGraph.keySet()) {
+				if (s.length() >= 2 && s.charAt(0) == '%' && s.charAt(1) == 'u') {
+					boolean isNumber = true;
+					for (int z = 2; z < s.length(); z++) {
+						if (!Character.isDigit(s.charAt(z))) {
+							isNumber = false;
+						}
+	 				}
+	 				if (isNumber && s.length() > 2) {
+						//System.out.println("Keeping: " + s);
+						// get keep it
+					} else {
+						//System.out.println("taking out: " + s);
+						id.add(s);
+						// get rid of it
+					}
+				} else {
+					//System.out.println("taking out: " + s);
+						id.add(s);
+					// get rid of it
+				}
+			}
+			currGraph.keySet().removeAll(id);
 
 	  largeIdMap.putAll(currGraph);
       }
@@ -296,7 +440,6 @@ largeColorGraph.putAll(largeIdMap);
 
    public Map<String, Integer> getIdMap() {
       Queue<CFGNode> q = getChildrenForPrint();
-// System.out.println("size of children:" + q.size());
  
      CFGNode current = null;
 
@@ -313,12 +456,11 @@ largeColorGraph.putAll(largeIdMap);
       hardCoded.add("%r1");
       hardCoded.add("%r2");
       hardCoded.add("%r3");
+      hardCoded.add("@_scanned_");
+
       largeIdMap.keySet().removeAll(hardCoded);
       while (q.size() > 0) {
           current = q.remove();
-  // System.out.println("id map! " + current.name + current.blockNum);
-    //  System.out.println();
-      //System.out.println();
 	  currGraph = new HashMap<String, Integer>(current.getIdMapHelper(  this.getLastMin( largeIdMap)   ));
           // check for duplicates, pick the lowest value
           
@@ -330,7 +472,6 @@ largeColorGraph.putAll(largeIdMap);
 	  }
 	  currGraph.keySet().removeAll(keysToRemove);
 	  currGraph.keySet().removeAll(hardCoded);
-
 	  largeIdMap.putAll(currGraph);
       }
       return largeIdMap;
@@ -362,12 +503,15 @@ largeColorGraph.putAll(largeIdMap);
       }
 
 
-
+      Set<String> idSet = this.getAllIdsHelper();
+      Set<String> t = null;
       this.makeInterGraph();
       while (toMakeGraph.size() > 0) {
         current = toMakeGraph.remove();
         current.makeInterGraph();
         current.markNotPrinted();
+	t = current.getAllIdsHelper();
+	idSet.addAll(t);
         reallyDone.add(current);
       }
 
@@ -377,15 +521,16 @@ largeColorGraph.putAll(largeIdMap);
         current = reallyDone.remove();
         // need to add edges bi-directionally
         //current.completeInterGraph();
- current.printAllSets();
+ //current.printAllSets();
 
         current.colorGraph();
 
         done.add(current);
       }
-      //Map<String, Integer> idMap = this.getIdMap();
+      //Set<String> idSet = this.getAllIds();
+      //Set<String> idSet = new HashSet<String>();
       //System.out.println("									ids: ");
-      //System.out.println(Arrays.toString(idMap.entrySet().toArray()));	
+      //System.out.println(Arrays.toString(idSet.toArray()));	
 
       Map<String, Integer> map = this.registerAllocation();
       //System.out.println("All coloring map size: " + map.size());
@@ -453,19 +598,50 @@ largeColorGraph.putAll(largeIdMap);
     		  maxEntry = entry;
     	  }
       }
-      // Map.Entry<String, Integer> minEntry = null;
-      // for (Map.Entry<String, Integer> entry: map.entrySet() ) {
-    	 //  if (minEntry == null || entry.getValue().compareTo(minEntry.getValue()) < 0) {
-    		//   minEntry = entry;
-    	 //  }
-      // }
+      //System.out.println("                  map0: ");
+     // System.out.println(Arrays.toString(map.entrySet().toArray()));  
 
 
+// need to decide, what is the highest 
+      if (maxEntry != null && maxEntry.getValue() < 4) {
+      //System.out.println("                  map0: ");
+     //System.out.println(Arrays.toString(map.entrySet().toArray()));  
+	// just insert the id values in, startign from 5
+	int r  = 5;
+	for (String s: idSet) {
+		map.put(s, r);
+		r = r + 1;
+	}
+		
+      } else {
+	// insert startign values but before that increase the color by the number of ids
+	// eg: u30 -> 5, u40 -> 6, then => i -> 5, u -> 6, u30 -> 7, u 40 -> 8
+      //System.out.println("                  map0: ");
+      //System.out.println(Arrays.toString(map.entrySet().toArray()));  
+      	for (Map.Entry<String, Integer> entry: map.entrySet() ) {
+		if (entry.getValue() > 4) {
+	//System.out.println("changing key, " + entry.getKey() + "to " + entry.getValue() + idSet.size());
+			map.put(entry.getKey(), entry.getValue() + idSet.size() );
 
+		}
+      	}
+	int r  = 5;
+	for (String s: idSet) {
+		map.put(s, r);
+		r = r + 1;
+	}
+
+      }
 
 
       //System.out.println("                  map1: ");
       //System.out.println(Arrays.toString(map.entrySet().toArray()));  
+      maxEntry = null;
+      for (Map.Entry<String, Integer> entry: map.entrySet() ) {
+    	  if (maxEntry == null || entry.getValue().compareTo(maxEntry.getValue()) > 0) {
+    		  maxEntry = entry;
+    	  }
+      }
 
       List<ARM> clean = new ArrayList<ARM>();
       List<ARM> regAllocation = new ArrayList<ARM>();
@@ -510,8 +686,11 @@ largeColorGraph.putAll(largeIdMap);
 
 
 
-     System.out.println("                  map2: ");
-     System.out.println(Arrays.toString(map.entrySet().toArray()));  
+    //System.out.println("                  map2: ");
+    //System.out.println(Arrays.toString(map.entrySet().toArray()));  
+    //  Set<String> idSet = this.getAllIdsHelper();
+    //System.out.println("									ids: ");
+    //System.out.println(Arrays.toString(idSet.toArray()));	
 
 
       while (done.size() > 0) {
@@ -679,6 +858,7 @@ largeColorGraph.putAll(largeIdMap);
         Set<String> temp2 = null;
 	//Set<String> ids = null;
 	Set<String> hardCoded = new HashSet<String>();
+	hardCoded.add("lr");
 	hardCoded.add("fp");
 	hardCoded.add("pc");
 	hardCoded.add("sp");
@@ -686,6 +866,7 @@ largeColorGraph.putAll(largeIdMap);
 	hardCoded.add("%r1");
   hardCoded.add("%r2");
   hardCoded.add("%r3");
+  hardCoded.add("@_scanned_");
 	hardCoded.add("lr");
 	for (int i = llvm.size() - 1; i >= 0; i--) {
 		for(int j = llvm.get(i).getARMS().size() - 1; j >= 0; j--) {
@@ -694,10 +875,61 @@ largeColorGraph.putAll(largeIdMap);
 //System.out.println(temp);
 //System.out.println(Arrays.toString(temp.toArray()));
 			temp.removeAll(hardCoded);
+
+			// remove everything that does not have %u and a numebr afterwards
+			// go through all of temp
+			// if there is %u and a number afterwards, then keep it, else get rid of it
+			Set<String> id = new HashSet<String>();
+			for (String s: temp) {
+				if (s.length() >= 2 && s.charAt(0) == '%' && s.charAt(1) == 'u') {
+					boolean isNumber = true;
+					for (int z = 2; z < s.length(); z++) {
+						if (!Character.isDigit(s.charAt(z))) {
+							isNumber = false;
+						}
+	 				}
+	 				if (isNumber && s.length() > 2) {
+	//					System.out.println("Keeping: " + s);
+						// get keep it
+					} else {
+	//					System.out.println("taking out: " + s);
+						id.add(s);
+						// get rid of it
+					}
+				} else {
+	//				System.out.println("taking out: " + s);
+					id.add(s);
+					// get rid of it
+				}
+			}
+			temp.removeAll(id);
+
 			temp2 = new HashSet<String>() ;
 			temp2.addAll(liveOutSet);
                         temp2.removeAll(temp);
 			temp2.removeAll(hardCoded);
+			Set<String> id2 = new HashSet<String>();
+			for (String s: temp2) {
+				if (s.charAt(0) == '%' && s.charAt(1) == 'u') {
+					boolean isNumber = true;
+					for (int z = 2; z < s.length(); z++) {
+						if (!Character.isDigit(s.charAt(z))) {
+							isNumber = false;
+						}
+	 				}
+	 				if (isNumber && s.length() > 2) {
+						// get keep it
+					} else {
+						id2.add(s);
+						// get rid of it
+					}
+				} else {
+					id2.add(s);
+					// get rid of it
+				}
+			}
+
+			temp2.removeAll(id2);
 			for (String s : temp) {
 				interGraph.put(s, temp2);
 			}

@@ -9,12 +9,21 @@ public class BinaryARM implements ARM {
      public String dest;
      public String reg;
      public String operand2;
+     public boolean flag;
 
      public BinaryARM(String op, String dest, String reg, String operand2) {
           this.op = Operation.valueOf(op);
           this.dest = dest;
           this.reg = reg;
           this.operand2 = operand2;
+          this.flag = false;
+     }
+     public BinaryARM(String op, String dest, String reg, String operand2, boolean flag) {
+          this.op = Operation.valueOf(op);
+          this.dest = dest;
+          this.reg = reg;
+          this.operand2 = operand2;
+	  this.flag = flag;
      }
 
      public enum Operation {
@@ -48,7 +57,9 @@ public class BinaryARM implements ARM {
 		if (t > 4) {  
 			// spill space
          		System.out.println( "\tsub\tr9, fp, #" + (map.get(reg)-4) * 4 ) ;
-         		System.out.println( "\tldr\tr9, [r9]" );
+         		if (flag) {
+				System.out.println( "\tldr\tr9, [r9]" );
+			}
 			// print the math
 			 
 			temp2 = "r9";
@@ -56,7 +67,19 @@ public class BinaryARM implements ARM {
 			temp2 = "r" + (t+4);
 		}
 	 } else {
-		temp2 = reg;
+	 	boolean isNumber = true;
+	 	for (int i = 0; i < reg.length(); i++) {
+			if (!Character.isDigit(reg.charAt(i))) {
+				isNumber = false;
+			}
+	 	}
+	 	if (isNumber) {
+         		System.out.println( "\tmovw\t" + "r9" + ", #:lower16:" + reg);
+         		System.out.println( "\tmovt\t" + "r9" + ", #:upper16:" + reg);
+			temp2 = "r9";
+	 	} else {
+			temp2 = reg;
+		}
 	 }
 
 	 if (map.get(operand2) != null ) {
@@ -64,7 +87,10 @@ public class BinaryARM implements ARM {
 		if (t > 4) {  
 			// spill space
          		System.out.println( "\tsub\tr10, fp, #" + (map.get(operand2)-4) * 4 ) ;
+			if (flag) {
          		System.out.println( "\tldr\tr10, [r10]" );
+
+			}
 			// print the math
 			 
 			temp3 = "r10";
@@ -88,18 +114,8 @@ public class BinaryARM implements ARM {
 	 	// sub it in to temp3
 	 	// print out the move statements 
 	 	// System.out.println( "\tmov\t" + temp + "," + temp1);
-         System.out.println( "\tmovw\t" + "r10" + ", #:lower16:" + temp3);
-         System.out.println( "\tmovt\t" + "r10" + ", #:upper16:" + temp3);
-
-   //       int t = Integer.parseInt(temp3);
-	 	// if (t > 128 || t < -127) {
-	 	// 	System.out.println( "\tmovw\t" + "r9" + ", #:lower16:" + "#" + temp3);
-   //       	System.out.println( "\tmovt\t" + "r9" + ", #:upper16:" + "#" + temp3);
-			// temp3 = "r9";
-	 	// } else {
-	 	// 	temp3 = "#" + temp3;
-	 	// }
-
+         	System.out.println( "\tmovw\t" + "r10" + ", #:lower16:" + temp3);
+         	System.out.println( "\tmovt\t" + "r10" + ", #:upper16:" + temp3);
 
 		temp3 = "r10";
 	 }
@@ -110,8 +126,8 @@ public class BinaryARM implements ARM {
 			int t = map.get(dest);
 			if (t > 4) {  
 				// spill space
-	         		System.out.println( "\tsub\tr10, fp, #" + (map.get(dest)-4) * 4 ) ;
-	         		System.out.println( "\tstr\tr10, [r10]" );
+	         		System.out.println( "\tsub\tr9, fp, #" + (map.get(dest)-4) * 4 ) ;
+	         		System.out.println( "\tstr\tr10, [r9]" );
 			} 
 	 	}
      }
