@@ -1,15 +1,20 @@
 #!/bin/bash
 
 
-time $( ./makeJava.sh)
-for i in $( ls /home/asouv/Downloads/benchmarks/ ); do
+$( ./makeJava.sh)
+for i in $( ls ./benchmarks/ ); do
     echo item: $i
-    java MiniCompiler /home/asouv/Downloads/benchmarks/$i/$i.mini -stack > /home/asouv/Downloads/benchmarks/$i/$i.ll
-    clang -m32 /home/asouv/Downloads/benchmarks/$i/$i.ll -o /home/asouv/Downloads/benchmarks/$i/e
-    clang -m32 -O0 /home/asouv/Downloads/benchmarks/$i/$i.c -o /home/asouv/Downloads/benchmarks/$i/eO0
-    clang -m32 -O3 /home/asouv/Downloads/benchmarks/$i/$i.c -o /home/asouv/Downloads/benchmarks/$i/eO3
-    time /home/asouv/Downloads/benchmarks/$i/e < /home/asouv/Downloads/benchmarks/$i/input > /home/asouv/Downloads/benchmarks/$i/myout
-    time /home/asouv/Downloads/benchmarks/$i/eO0 < /home/asouv/Downloads/benchmarks/$i/input > /home/asouv/Downloads/benchmarks/$i/myout
-    time /home/asouv/Downloads/benchmarks/$i/eO3 < /home/asouv/Downloads/benchmarks/$i/input > /home/asouv/Downloads/benchmarks/$i/myout
-    diff /home/asouv/Downloads/benchmarks/$i/myout /home/asouv/Downloads/benchmarks/$i/output
+    java MiniCompiler ./benchmarks/$i/$i.mini -stack > ./benchmarks/$i/$i.ll
+    clang -m32 ./benchmarks/$i/$i.ll -o ./benchmarks/$i/e
+    clang -m32 -w -O0 ./benchmarks/$i/$i.c -o ./benchmarks/$i/eO0
+    clang -m32 -w -O3 ./benchmarks/$i/$i.c -o ./benchmarks/$i/eO3
+    echo Timing our compiled code....
+    time ./benchmarks/$i/e < ./benchmarks/$i/input > ./benchmarks/$i/myout
+    diff ./benchmarks/$i/myout ./benchmarks/$i/output
+    echo Timing clang -O0 code....
+    time ./benchmarks/$i/eO0 < ./benchmarks/$i/input > ./benchmarks/$i/o0out
+    diff ./benchmarks/$i/o0out ./benchmarks/$i/output
+    echo Timing clang -O3 code....
+    time ./benchmarks/$i/eO3 < ./benchmarks/$i/input > ./benchmarks/$i/o3out
+    diff ./benchmarks/$i/o3out ./benchmarks/$i/output
 done 

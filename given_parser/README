@@ -1,3 +1,5 @@
+(All of the following insructions are to be done in the given_parser directory)
+(And on the unix servers, not on the pi)
 
 How to build compiler:
  - run the script "makeJava.sh"
@@ -10,4 +12,6 @@ To use the compiler:
  - "-llvm" will generate the register based llvm code
  - "-arm"  will generate a partially working arm code of the mini file
  - you can also optionally do "-json" for the json representation of the mini file
- - if you would like to run all of the benchmarks you can run the file called regrScript.sh but you will need to change the folder path of the folder of benchmarks
+ - to run the benchmarks you can run "./regrScript.sh"
+   - this will run the script that will compile the our compiler and then run all of the benchmarks using the given input 
+   - it will also diff the output of our compiler with the given output
